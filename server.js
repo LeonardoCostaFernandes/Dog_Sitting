@@ -9,9 +9,10 @@ const fileupload = require('express-fileupload');
 
 const cookieParser = require('cookie-parser');
 
-// Routes files
+const authRouter = require('./routes/auth');
+const bookingsRouter = require('./routes/bookings');
+//const reservationsRouter = require('./routes/reservations');
 
-const auth = require('./routes/auth');
 
 
 // Load env vars
@@ -37,26 +38,23 @@ app.use(fileupload());
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // Mount routers
-app.use('/api/v1/auth', auth);
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/bookings', bookingsRouter);
+//app.use('/api/v1/reservations', reservationsRouter);
 
 app.use(errorHandler);
 
-
 const PORT = process.env.PORT || 4000;
 
-const server=app.listen(
+const server = app.listen(
   PORT,
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold)
-  );
-  
-  // Handle unhandled promise rejections
-  process.on('unhandledRejection', (err, promise) => {
-    console.log(`Error: ${err.message}`.red);
-    // Close server & exit process
-    server.close(() => process.exit(1));
-  });
+);
 
-
-  
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err, promise) => {
+  console.log(`Error: ${err.message}`.red);
+  // Close server & exit process
+  server.close(() => process.exit(1));
+});
