@@ -1,0 +1,26 @@
+[
+ {
+   "name": "Cão 01 do Batata 00",
+   "breed": "Rafeiro",
+   "age": 2,
+   "user": "6411ce4b543a94bb7d402981"
+ },
+ {
+   "name": "Cão 02 do Batata 00",
+   "breed": "Vira-lata caramelo",
+   "age": 3,
+   "user": "6411ce4b543a94bb7d402981"
+ },
+ {
+  "name": "Cão 01 do Batata 01",
+  "breed": "cachorro fancy",
+  "age": 3,
+  "user": "6411ce4b543a94bb7d402982"
+},
+{
+ "name": "Cão 01 do Batata 02",
+ "breed": "Golden Retriever",
+ "age": 3,
+ "user": "6411ce4b543a94bb7d402983"
+}
+]

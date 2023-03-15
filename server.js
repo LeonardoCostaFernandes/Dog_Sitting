@@ -6,12 +6,12 @@ const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 const colors = require('colors');
 const fileupload = require('express-fileupload');
-//const auth = require('./routes/auth');
+
 const cookieParser = require('cookie-parser');
 
 // Routes files
-//const bootcamps = require('./routes/bootcamps');
 
+const auth = require('./routes/auth');
 
 
 // Load env vars
@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Mount routers
-//app.use('/api/v1/bootcamps', bootcamps);
+app.use('/api/v1/auth', auth);
 
 app.use(errorHandler);
 

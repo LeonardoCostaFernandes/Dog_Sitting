@@ -1,0 +1,23 @@
+[
+ {
+   "name": "Batata 00",
+   "email": "Batata00@example.com",
+   "password": "123456"
+ },
+ {
+   "name": "Batata 01",
+   "email": "Batata01@example.com",
+   "password": "123456"
+ },
+ {
+  "name": "Batata 02",
+  "email": "Batata02@example.com",
+  "password": "123456"
+},
+{
+ "name": "Batata 03",
+ "email": "Batata03@example.com",
+ "password": "123456"
+}
+]
+
