@@ -21,3 +21,22 @@
 }
 ]
 
+
+/*
+register user
+{
+		"name": "babata05",
+		"email": "babata05@gmail.com",
+		"password": "123456"
+	}
+  */
+
+
+  /*
+  login user
+  	{
+		"email": "babata05@gmail.com",
+		"password": "123456"
+	}
+  */
+  

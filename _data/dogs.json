@@ -24,3 +24,68 @@
  "user": "6411ce4b543a94bb7d402983"
 }
 ]
+
+/*
+dog register
+
+{
+ "name": "Cão 01 do Batata 05",
+ "breed": "nem cachorro é",
+ "age": 3,
+ "user": "641388ce59540bdbb7de383c"
+}
+*/
+
+
+/*
+RAÇAS DE CACHORROS
+Akita
+Basset hound
+Beagle
+Bichon frisé
+Boiadeiro australiano
+Border collie
+Boston terrier
+Boxer
+Buldogue francês
+Buldogue inglês
+Bull terrier
+Cane corso
+Cavalier king charles spaniel
+Chihuahua
+Chow chow
+Cocker spaniel inglês
+Dachshund
+Dálmata
+Doberman
+Dogo argentino
+Dogue alemão
+Fila brasileiro
+Golden retriever
+Husky siberiano
+Jack russell terrier
+Labrador retriever
+Lhasa apso
+Lulu da pomerânia
+Maltês
+Mastiff inglês
+Mastim tibetano
+Pastor alemão
+Pastor australiano
+Pastor de Shetland
+Pequinês
+Pinscher
+Pit bull
+Poodle
+Pug
+Rafeiro
+Rottweiler
+Schnauzer
+Shar-pei
+Shiba
+Shih tzu
+Staffordshire bull terrier
+Weimaraner
+Yorkshire
+Outro
+*/

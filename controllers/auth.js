@@ -1,6 +1,7 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const User = require('../models/User');
+const path = require('path');
 
 // @desc      Register user
 // @route     POST /api/v1/auth/register
@@ -109,4 +110,38 @@ exports.logout = asyncHandler(async (req, res, next) => {
     success: true,
     data: {}
   });
+});
+
+// @desc      Upload photo for user
+// @route     PUT /api/v1/auth/:id/photo
+// @access    Private
+exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
+  const auth = await User.findById(req.params.id);
+
+  if (!auth) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  if (!req.files) {
+    return next(new ErrorResponse(`Please upload a file`, 400));
+  }
+
+  const file = req.files.file;
+
+  // Make sure the image is a photo
+  if (!file.mimetype.startsWith('image')) {
+    return next(new ErrorResponse(`Please upload an image file`, 400));
+  }
+
+  // Check filesize
+  if (file.size > process.env.MAX_FILE_UPLOAD) {
+    return next(
+      new ErrorResponse(
+        `Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`,
+        400
+      )
+    );
+  }
 });
