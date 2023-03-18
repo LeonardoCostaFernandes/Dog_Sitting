@@ -27,7 +27,7 @@ const calendars = JSON.parse(
 const importData = async () => {
   try {
     await Calendar.create(calendars);
-    console.log('calendar  Imported...'.green.inverse);
+    console.log('calendar Imported...'.green.inverse);
     process.exit();
   } catch (err) {
     console.error(err);

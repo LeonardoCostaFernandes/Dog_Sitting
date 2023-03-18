@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser');
 
 const authRouter = require('./routes/auth');
 const dogsRouter = require('./routes/dog');
-const bookingsRouter = require('./routes/bookings');
+//const bookingsRouter = require('./routes/bookings');
 //const reservationsRouter = require('./routes/reservations');
 
 
@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Mount routers
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/dogs', dogsRouter);
-app.use('/api/v1/bookings', bookingsRouter);
+//app.use('/api/v1/bookings', bookingsRouter);
 
 //app.use('/api/v1/reservations', reservationsRouter);
 
