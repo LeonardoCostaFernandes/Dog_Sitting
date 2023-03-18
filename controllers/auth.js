@@ -7,12 +7,14 @@ const path = require('path');
 // @route     POST /api/v1/auth/register
 // @access    Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, address, phone } = req.body;
 
   // Create user
   const user = await User.create({
     name,
     email,
+    address,
+    phone,
     password
   });
 
@@ -115,9 +117,10 @@ exports.logout = asyncHandler(async (req, res, next) => {
 // @desc      Upload photo for user
 // @route     PUT /api/v1/auth/:id/photo
 // @access    Private
-exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
+exports.authPhotoUpload = asyncHandler(async (req, res, next) => {
+  console.log(req.params.id);
   const auth = await User.findById(req.params.id);
-
+  console.log(auth);
   if (!auth) {
     return next(
       new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
@@ -144,4 +147,23 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
       )
     );
   }
+  
+  
+  // Create custom filename
+  file.name = `photo_${auth._id}${path.parse(file.name).ext}`;
+
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
+    if (err) {
+      console.error(err);
+      return next(new ErrorResponse(`Problem with file upload`, 500));
+    }
+
+    await User.findByIdAndUpdate(req.params.id, { photo: file.name });
+
+    res.status(200).json({
+      success: true,
+      data: file.name
+    });
+  });
+  
 });
