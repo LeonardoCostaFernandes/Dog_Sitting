@@ -1,5 +1,5 @@
 const express = require('express');
-const { addDog, getDogs } = require('../controllers/dogs');
+const { addDog, getDogs, dogPhotoUpload } = require('../controllers/dogs');
 
 const router = express.Router({ mergeParams: true });
 
@@ -8,6 +8,9 @@ const { protect } = require('../middleware/auth');
 router.route('/')
   .post(protect, addDog)
   .get(protect, getDogs);
+
+
+  router.route('/:id/photo').put(dogPhotoUpload);
 
 module.exports = router;
 
