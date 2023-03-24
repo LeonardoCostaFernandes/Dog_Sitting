@@ -103,7 +103,7 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Not authorized to delete this booking`, 401)
     );
   }
-  await booking.deleteOne();
+  await booking.deleteOne();;
 
   console.log('Booking deleted');
 

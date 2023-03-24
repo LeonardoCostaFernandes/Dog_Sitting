@@ -1,5 +1,5 @@
 const express = require('express');
-const { addDog, getDogs, dogPhotoUpload } = require('../controllers/dogs');
+const { addDog, getDogs, dogPhotoUpload, deleteDog } = require('../controllers/dogs');
 
 const router = express.Router({ mergeParams: true });
 
@@ -11,7 +11,9 @@ router.route('/')
 
 
   router.route('/:id/photo').put(dogPhotoUpload);
-
+  
+  router.route('/:id')
+  .delete(protect, deleteDog);
 module.exports = router;
 
 

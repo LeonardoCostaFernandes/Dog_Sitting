@@ -48,7 +48,7 @@ exports.deleteDog = asyncHandler(async (req, res, next) => {
     );
   }
 
-  await dog.remove();
+  await dog.deleteOne();
 
   res.status(200).json({ success: true, data: {} });
 });

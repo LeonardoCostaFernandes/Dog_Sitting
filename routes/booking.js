@@ -6,6 +6,9 @@ const { protect } = require('../middleware/auth');
 router.route('/')
   .post(protect, addBooking)
   .get(protect, getBookings)
-  .delete(protect, deleteBooking);
+  
 
+  router
+  .route('/:id')
+  .delete(protect, deleteBooking);
 module.exports = router;
