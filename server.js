@@ -1,4 +1,3 @@
-
 const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
@@ -7,26 +6,27 @@ const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 const colors = require('colors');
 const fileupload = require('express-fileupload');
-
 const cookieParser = require('cookie-parser');
-
 const authRouter = require('./routes/auth');
 const dogsRouter = require('./routes/dog');
-//const bookingsRouter = require('./routes/bookings');
-//const reservationsRouter = require('./routes/reservations');
+const bookingsRouter = require('./routes/booking');
 
 
 
-// Load env vars
+
+
+// Load env vars (dotenv é usado para carregar as variáveis ​​de ambiente a partir do arquivo config.env)
 dotenv.config({ path: './config/config.env' });
+//connectDB é chamada para conectar-se ao banco de dados.
 connectDB();
 
+//cria uma instância do Express 
 const app = express();
 
-// Body parser
+// Body parser - usa a função json() para analisar o corpo das solicitações.
 app.use(express.json());
 
-// Cookie parser
+// Cookie parser - usada para analisar os cookies e fileupload() é usada para lidar com uploads de arquivos.
 app.use(cookieParser());
 
 // Dev logging middleware
@@ -37,15 +37,17 @@ if (process.env.NODE_ENV === 'development') {
 // File uploading
 app.use(fileupload());
 
-// Set static folder
+// Set static folder - usada para configurar o diretório público, que é usado para servir arquivos estáticos, como imagens do Public
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mount routers
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/dogs', dogsRouter);
-//app.use('/api/v1/bookings', bookingsRouter);
+app.use('/api/v1/dogs/:id', dogsRouter);
 
-//app.use('/api/v1/reservations', reservationsRouter);
+app.use('/api/v1/bookings', bookingsRouter);
+app.use('/api/v1/bookings/:id', bookingsRouter);
+
 
 app.use(errorHandler);
 

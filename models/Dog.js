@@ -7,6 +7,7 @@ const DogSchema = new mongoose.Schema({
   },
   breed: {
     type: String,
+    enum: ["Yorkshire Terrier","French Bulldog","Golden Retriever","Dachshund","Samoyed","Cairn Terrier","Shiba Inu","Pomeranian","Pomsky","Australian Shepherd","Bichon Frise","Dalmatian","American Eskimo","Chiweenie","Brussels Griffon","Papillon","Cavalier King Charles Spaniel","Shetland Sheepdog","Finnish Lapphund","Shih Tzu","Yorkiepoo","Pug","Whoodle","Cockapoo","Docker", "outro"],
     required: [true, 'Please add a breed for the dog']
   },
   ano_de_nascimento: {

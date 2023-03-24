@@ -9,8 +9,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   console.log("essa é a req.cookies", req.cookies);
 
-  console.log("esse é o cookie", 'cookies')
-
+  
   if(req.cookies.token) {
   token = req.cookies.token
   }

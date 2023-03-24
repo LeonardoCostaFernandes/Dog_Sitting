@@ -1,16 +1,13 @@
-const colors = require('colors');
 const fs = require('fs');
 const mongoose = require('mongoose');
+const colors = require('colors');
 const dotenv = require('dotenv');
-
-
-//require('dotenv').config({ path: './config/config.env' });
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
 // Load models
-const Calendar = require('./models/Calendar');
+const Booking = require('./models/Booking');
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI, {
@@ -19,15 +16,15 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 // Read JSON file
-const calendars = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/calendar.json`, 'utf-8')
+const bookings = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/bookings.json`, 'utf-8')
 );
 
 // Import into DB
 const importData = async () => {
   try {
-    await Calendar.create(calendars);
-    console.log('calendar Imported...'.green.inverse);
+    await Booking.create(bookings);
+    console.log('Bookings Imported...'.green.inverse);
     process.exit();
   } catch (err) {
     console.error(err);
@@ -37,8 +34,8 @@ const importData = async () => {
 // Delete data
 const deleteData = async () => {
   try {
-    await Calendar.deleteMany();
-    console.log('Calendar Destroyed...'.red.inverse);
+    await Booking.deleteMany();
+    console.log('Bookings Destroyed...'.red.inverse);
     process.exit();
   } catch (err) {
     console.error(err);
