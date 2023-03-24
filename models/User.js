@@ -3,10 +3,17 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const geocoder = require('../utils/geocoder');
 
+
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please add a name']
+  },
+  nif: {
+    type: Number,
+    required: [true, 'Por favor, adicione um número de identificação'],
+    minlength: [9, 'O número de identificação deve ter 9 dígitos'],
+    maxlength: [9, 'O número de identificação deve ter 9 dígitos']
   },
   email: {
     type: String,

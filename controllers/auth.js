@@ -1,6 +1,8 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const User = require('../models/User');
+const geocoder = require('../utils/geocoder');
+
 const path = require('path');
 
 // @desc      Register user

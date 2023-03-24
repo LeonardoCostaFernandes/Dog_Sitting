@@ -18,7 +18,12 @@ const DogSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'User',
     required: true
-  }
+  },
+  obs: {
+    type: String,
+    required: [false, 'Caso não tenha nenhuma observação vou entender que o cão é de boa'],
+    default: 'sem observações'
+  },
 });
 
 module.exports = mongoose.model('Dog', DogSchema);

@@ -2,8 +2,9 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Booking = require('../models/Booking');
 const Dog = require('../models/Dog');
+const { countBookingsByDate } = require('../utils/bookingUtils');
 
-
+let quantidadeMaximaDeCaesPorDia = 11;
 
 // @desc    Add a booking
 // @route   POST /api/v1/bookings
@@ -48,7 +49,7 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
 
   // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada
   // é maior ou igual a 10
-  if (existingBookingsCount + booking_day.length >= 11) {
+  if (existingBookingsCount + booking_day.length >= quantidadeMaximaDeCaesPorDia) {
     console.log('Não é possível realizar o booking por indisponibilidade de espaço');
     return res.status(400).json({ error: 'Não é possível realizar o booking por indisponibilidade de espaço' });
   }
@@ -82,6 +83,33 @@ exports.getBookings = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: bookings
+  });
+});
+
+// @desc      Get all bookings
+// @route     GET /api/v1/bookings
+// @access    Public
+exports.getAllBookings = asyncHandler(async (req, res, next) => { 
+
+  const bookings = await Booking.find();
+  res.status(200).json({
+    success: true,
+    data: bookings
+  });
+
+});
+
+// @desc      Get all bookings by date
+// @route     GET /api/v1/bookings
+// @access    Public
+exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
+
+  const bookings = await Booking.find();
+  const countByDate = await countBookingsByDate();
+
+  res.status(200).json({
+    success: true,
+    data: { bookings, countByDate }
   });
 });
 
