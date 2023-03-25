@@ -11,7 +11,7 @@ const authRouter = require('./routes/auth');
 const dogsRouter = require('./routes/dog');
 const bookingsRouter = require('./routes/booking');
 const getAllBookingsByDate = require('./routes/booking');
-
+const getAllBookingsBetweenDates = require('./routes/booking');
 
 
 
@@ -48,7 +48,7 @@ app.use('/api/v1/dogs/:id', dogsRouter);
 app.use('/api/v1/bookings', bookingsRouter);
 app.use('/api/v1/bookings/:id', bookingsRouter);
 app.use('/api/v1/bookings/:date', getAllBookingsByDate);
-  
+app.use('/api/v1/bookings/:dataInicial/:dataFinal', getAllBookingsBetweenDates);  
 
 app.use(errorHandler);
 

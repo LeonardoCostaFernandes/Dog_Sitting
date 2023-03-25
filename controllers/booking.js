@@ -117,6 +117,42 @@ exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Get all bookings between two dates
+// @route   GET /api/v1/bookings/:dataInicial/:dataFinal
+// @access  Public
+exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
+  const dataInicial = new Date(req.params.dataInicial);
+  const dataFinal = new Date(req.params.dataFinal);
+
+  const bookings = await Booking.find({
+    booking_day: {
+      $gte: dataInicial,
+      $lte: dataFinal
+    }
+  });
+
+
+  const bookingDays = bookings.map(booking => new Date(booking.booking_day).toISOString().slice(0, 10));
+  
+  
+  console.log('bookings:', bookings);
+  console.log('dataInicial:', dataInicial);
+  console.log('dataFinal:', dataFinal);
+  console.log('req.params.dataInicial:', req.params.dataInicial);
+  console.log('req.params.dataFinal:', req.params.dataFinal);
+  console.log('bookingDays:', bookingDays);
+  
+  
+  
+  
+  res.status(200).json({
+    success: true,
+    data: bookingDays
+
+    
+  });
+});
+
 // @desc    Delete booking
 // @route   DELETE /api/v1/bookings/:id
 // @access  Private

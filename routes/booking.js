@@ -1,5 +1,12 @@
 const express = require('express');
-const { addBooking, getBookings, deleteBooking, getAllBookingsByDate  } = require('../controllers/booking');
+const { addBooking, 
+        getBookings,
+        deleteBooking,
+        getAllBookingsByDate, 
+        getAllBookingsBetweenDates,
+        
+      } = require('../controllers/booking');
+
 const router = express.Router({ mergeParams: true });
 const { protect } = require('../middleware/auth');
 
@@ -16,5 +23,9 @@ router.route('/')
   router
   .route('/:date')
   .get(getAllBookingsByDate);
+
+  router
+  .route('/:dataInicial/:dataFinal')
+  .get(getAllBookingsBetweenDates);
   
 module.exports = router;
