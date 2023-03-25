@@ -3,8 +3,11 @@ const ErrorResponse = require('../utils/errorResponse');
 const Booking = require('../models/Booking');
 const Dog = require('../models/Dog');
 const { countBookingsByDate } = require('../utils/bookingUtils');
+const amountOfDogs = require('../config/amountOfDogs');
 
-let quantidadeMaximaDeCaesPorDia = 11; //se quiser 10 o numero tem que quer 10+1, se quiser 20 tem que ser 20+1
+
+
+//let quantidadeMaximaDeCaesPorDia = 11; //se quiser 10 o numero tem que quer 10+1, se quiser 20 tem que ser 20+1
 
 // @desc    Add a booking
 // @route   POST /api/v1/bookings
@@ -50,7 +53,7 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
 
   // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada
   // é maior ou igual a 10
-  if (existingBookingsCount + booking_day.length >= quantidadeMaximaDeCaesPorDia) {
+  if (existingBookingsCount + booking_day.length >= amountOfDogs) {
     console.log('Não é possível realizar o booking por indisponibilidade de espaço');
     return res.status(400).json({ error: 'Não é possível realizar o booking por indisponibilidade de espaço' });
   }
@@ -191,19 +194,50 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: {} });
 });
 
-// @desc      Update Booking
-  // @route     PUT /api/v1/booking/:id
-  // @access    Private
-  exports.updateBooking = asyncHandler(async (req, res, next) => {
+exports.updateBooking = asyncHandler(async (req, res, next) => {
+  const booking = await Booking.findById(req.params.id);
 
-    const booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
+  if (!booking) {
+    return next(
+      new ErrorResponse(`Booking not found with id of ${req.params.id}`, 404)
+    );
+  }
 
-    if (!booking) {
-      return next(new ErrorResponse(`booking not found with id of ${req.params.id}`, 404));
-    }
+  const { booking_day } = req.body;
 
-    res.status(200).json({ success: true, data: booking });
+  const currentDate = new Date();
+  const newBookingDate = new Date(booking_day);
+  console.log("newBookingDate", newBookingDate);
+
+  // Verifica se a data da reserva é maior que a data atual
+  if (newBookingDate.getTime() <= currentDate.getTime()) {
+    console.log('Não é possível realizar o booking para a data selecionada');
+    return res.status(400).json({ error: 'Não é possível realizar o booking para a data selecionada, escolha uma data posterior ao dia de hoje' });
+  }
+
+  // Verifica quantas reservas já existem para o dia informado
+  const existingBookingsCount = await Booking.countDocuments({
+    booking_day: newBookingDate
   });
+
+  console.log('existingBookingsCount:', existingBookingsCount);
+  console.log(newBookingDate, "dia requisitado para reservar");
+
+  // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada
+  // é maior ou igual a 10
+  if (existingBookingsCount >= amountOfDogs) {
+    console.log('Não é possível realizar o booking por indisponibilidade de espaço');
+    return res.status(400).json({ error: 'Não é possível realizar o booking por indisponibilidade de espaço' });
+  }
+
+  const updatedBooking = await Booking.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true, runValidators: true }
+  );
+
+  console.log("req.params.id", req.params.id);
+  console.log("req.body", req.body);
+
+  res.status(200).json({ success: true, data: updatedBooking });
+});
