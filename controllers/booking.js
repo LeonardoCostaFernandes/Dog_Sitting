@@ -4,7 +4,7 @@ const Booking = require('../models/Booking');
 const Dog = require('../models/Dog');
 const { countBookingsByDate } = require('../utils/bookingUtils');
 
-let quantidadeMaximaDeCaesPorDia = 11;
+let quantidadeMaximaDeCaesPorDia = 11; //se quiser 10 o numero tem que quer 10+1, se quiser 20 tem que ser 20+1
 
 // @desc    Add a booking
 // @route   POST /api/v1/bookings
@@ -99,17 +99,21 @@ exports.getAllBookings = asyncHandler(async (req, res, next) => {
 
 });
 
-// @desc      Get all bookings by date
-// @route     GET /api/v1/bookings
-// @access    Public
+// @desc    Get all bookings for a specific date
+// @route   GET /api/v1/bookings/:date
+// @access  Public
 exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
+  const date = req.params.date;
 
-  const bookings = await Booking.find();
-  const countByDate = await countBookingsByDate();
+  const bookings = await Booking.find({
+    booking_day: { $eq: new Date(date) }
+  });
+
+  console.log('bookings:', bookings);
 
   res.status(200).json({
     success: true,
-    data: { bookings, countByDate }
+    data: bookings
   });
 });
 
