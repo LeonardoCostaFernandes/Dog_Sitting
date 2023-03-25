@@ -104,7 +104,7 @@ exports.getAllBookings = asyncHandler(async (req, res, next) => {
 });
 
 /// @desc    Get all bookings for a specific date com contador de dias
-// @route   GET /api/v1/bookings/:date
+// @route   GET /api/v1/bookings/:date (descrita no routes como "/:dataInicial")
 // @access  Public
 exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
   const date = req.params.date;

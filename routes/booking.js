@@ -23,12 +23,10 @@ router.route('/')
   .put( protect, updateBooking);
   
 
-  router
-  .route('/:date')
-  .get(getAllBookingsByDate);
-
+  
   router
   .route('/:dataInicial/:dataFinal')
+  .get(getAllBookingsByDate)
   .get(getAllBookingsBetweenDates);
   
 module.exports = router;
