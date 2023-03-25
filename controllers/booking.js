@@ -99,15 +99,16 @@ exports.getAllBookings = asyncHandler(async (req, res, next) => {
 
 });
 
-// @desc    Get all bookings for a specific date
+/// @desc    Get all bookings for a specific date
 // @route   GET /api/v1/bookings/:date
 // @access  Public
 exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
   const date = req.params.date;
 
-  const bookings = await Booking.find({
-    booking_day: { $eq: new Date(date) }
-  });
+  const bookings = await Booking.aggregate([
+    { $match: { booking_day: { $eq: new Date(date) } } },
+    { $group: { _id: "$booking_day", count: { $sum: 1 } } }
+  ]);
 
   console.log('bookings:', bookings);
 
@@ -117,7 +118,7 @@ exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc    Get all bookings between two dates
+// @desc    Get all bookings between two dates com contador
 // @route   GET /api/v1/bookings/:dataInicial/:dataFinal
 // @access  Public
 exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
