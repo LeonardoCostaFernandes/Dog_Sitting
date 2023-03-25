@@ -4,6 +4,7 @@ const { addBooking,
         deleteBooking,
         getAllBookingsByDate, 
         getAllBookingsBetweenDates,
+        updateBooking
         
       } = require('../controllers/booking');
 
@@ -18,7 +19,9 @@ router.route('/')
 
   router
   .route('/:id')
-  .delete(protect, deleteBooking);
+  .delete(protect, deleteBooking)
+  .put( protect, updateBooking);
+  
 
   router
   .route('/:date')
