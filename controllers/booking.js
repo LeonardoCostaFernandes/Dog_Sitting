@@ -134,7 +134,18 @@ exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
 
   const bookingDays = bookings.map(booking => new Date(booking.booking_day).toISOString().slice(0, 10));
   
+  // Inicializa um objeto para armazenar as contagens
+  const counts = {};
   
+  // Atualiza as contagens para cada data
+  bookingDays.forEach(date => {
+    counts[date] = counts[date] ? counts[date] + 1 : 1;
+  });
+  
+  // Cria um array de objetos com as contagens para cada data
+  const result = Object.keys(counts).map(date => ({ booking_day: date, count: counts[date] }));
+
+
   console.log('bookings:', bookings);
   console.log('dataInicial:', dataInicial);
   console.log('dataFinal:', dataFinal);
@@ -147,7 +158,7 @@ exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
   
   res.status(200).json({
     success: true,
-    data: bookingDays
+    data: result
 
     
   });
