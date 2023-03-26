@@ -221,10 +221,12 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
   }
 
   // Counts how many bookings already exist for the selected date, excluding the current booking
-  const amountOfDogs = booking.amountOfDogs;
   const existingBookingsCount = await Booking.countDocuments({
-    booking_day: { $eq: newBookingDate },
-    _id: { $ne: req.params.id }
+    $and: [
+      { id_dog: { $eq: booking.id_dog } },
+      { booking_day: { $eq: newBookingDate } },
+      { _id: { $ne: req.params.id } }
+    ]
   });
 
   console.log(newBookingDate, "requested date for booking");
