@@ -127,16 +127,16 @@ exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get all bookings between two dates com contador
-// @route   GET /api/v1/bookings/:dataInicial/:dataFinal
+// @route   GET /api/v1/bookings/:startDate/:endDate
 // @access  Public
 exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
-  const startDate  = new Date(req.params.startDate );
-  const endDate  = new Date(req.params.endDate );
+  const startDate = new Date(req.params.startDate);
+  const endDate = new Date(req.params.endDate);
 
   const bookings = await Booking.find({
     booking_day: {
-      $gte: startDate ,
-      $lte: endDate 
+      $gte: startDate,
+      $lte: endDate
     }
   });
 
@@ -155,9 +155,9 @@ exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
 
   console.log('bookings:', bookings);
   console.log('startDate:', startDate);
-  console.log('endDate :', endDate );
+  console.log('endDate:', endDate);
   console.log('req.params.startDate:', req.params.startDate);
-  console.log('req.params.endDate :', req.params.endDate );
+  console.log('req.params.endDate:', req.params.endDate);
   console.log('bookingDays:', bookingDays);
   
   res.status(200).json({
