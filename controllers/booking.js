@@ -22,6 +22,13 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
   }
 
   const currentDate = new Date();
+
+  // Validating booking_day parameter to ensure that it is a valid date
+  if (isNaN(Date.parse(booking_day))) {
+    console.log('A data da reserva é inválida');
+    return res.status(400).json({ error: 'A data da reserva é inválida' });
+  }
+
   const bookingDate = new Date(booking_day);
   console.log("bookingDate", bookingDate);
 
@@ -40,8 +47,9 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
 
   // Verifica quantas reservas já existem para o dia informado
   const existingBookingsCount = await Booking.countDocuments({
-    booking_day: { $in: booking_day }
+    booking_day: { $eq: booking_day }
   });
+  
 
   console.log('existingBookingsCount:', existingBookingsCount);
   console.log(booking_day, "dia requisitado para reservar");
@@ -124,13 +132,13 @@ exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/bookings/:dataInicial/:dataFinal
 // @access  Public
 exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
-  const dataInicial = new Date(req.params.dataInicial);
-  const dataFinal = new Date(req.params.dataFinal);
+  const startDate  = new Date(req.params.startDate );
+  const endDate  = new Date(req.params.endDate );
 
   const bookings = await Booking.find({
     booking_day: {
-      $gte: dataInicial,
-      $lte: dataFinal
+      $gte: startDate ,
+      $lte: endDate 
     }
   });
 
@@ -148,10 +156,10 @@ exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
   const result = Object.keys(counts).map(date => ({ booking_day: new Date(date), count: counts[date] }));
 
   console.log('bookings:', bookings);
-  console.log('dataInicial:', dataInicial);
-  console.log('dataFinal:', dataFinal);
-  console.log('req.params.dataInicial:', req.params.dataInicial);
-  console.log('req.params.dataFinal:', req.params.dataFinal);
+  console.log('startDate:', startDate);
+  console.log('endDate :', endDate );
+  console.log('req.params.startDate:', req.params.startDate);
+  console.log('req.params.endDate :', req.params.endDate );
   console.log('bookingDays:', bookingDays);
   
   res.status(200).json({
@@ -200,6 +208,10 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
 
   const { booking_day } = req.body;
 
+  if (isNaN(Date.parse(booking_day))) {
+    return res.status(400).json({ error: 'Data inválida' });
+  }
+
   const currentDate = new Date();
   const newBookingDate = new Date(booking_day);
   console.log("newBookingDate", newBookingDate);
@@ -212,7 +224,7 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
 
   // Verifica quantas reservas já existem para o dia informado
   const existingBookingsCount = await Booking.countDocuments({
-    booking_day: newBookingDate
+    booking_day: { $eq: newBookingDate }
   });
 
   console.log('existingBookingsCount:', existingBookingsCount);
@@ -236,3 +248,4 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: updatedBooking });
 });
+
