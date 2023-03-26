@@ -2,12 +2,7 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Booking = require('../models/Booking');
 const Dog = require('../models/Dog');
-const { countBookingsByDate } = require('../utils/bookingUtils');
 const amountOfDogs = require('../config/amountOfDogs');
-
-
-
-//let quantidadeMaximaDeCaesPorDia = 11; //se quiser 10 o numero tem que quer 10+1, se quiser 20 tem que ser 20+1
 
 // @desc    Add a booking
 // @route   POST /api/v1/bookings
@@ -91,7 +86,7 @@ exports.getBookings = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Get all bookings
-// @route     GET /api/v1/bookings
+// @route     GET /api/v1/bookings/all
 // @access    Public
 exports.getAllBookings = asyncHandler(async (req, res, next) => { 
 
@@ -110,10 +105,10 @@ exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
   /**
    * @param {string} req.params.date - The date in format 'YYYY-MM-DD'
    */
-  const date = req.params.date;
+  const date = new Date(req.params.date);
 
   const bookings = await Booking.aggregate([
-    { $match: { booking_day: { $eq: new Date(date) } } },
+    { $match: { booking_day: { $eq: date } } },
     { $group: { _id: "$booking_day", count: { $sum: 1 } } }
   ]);
 
@@ -139,8 +134,7 @@ exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
     }
   });
 
-
-  const bookingDays = bookings.map(booking => new Date(booking.booking_day).toISOString().slice(0, 10));
+  const bookingDays = bookings.map(booking => booking.booking_day.toISOString().slice(0, 10));
   
   // Inicializa um objeto para armazenar as contagens
   const counts = {};
@@ -151,8 +145,7 @@ exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
   });
   
   // Cria um array de objetos com as contagens para cada data
-  const result = Object.keys(counts).map(date => ({ booking_day: date, count: counts[date] }));
-
+  const result = Object.keys(counts).map(date => ({ booking_day: new Date(date), count: counts[date] }));
 
   console.log('bookings:', bookings);
   console.log('dataInicial:', dataInicial);
@@ -161,14 +154,9 @@ exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
   console.log('req.params.dataFinal:', req.params.dataFinal);
   console.log('bookingDays:', bookingDays);
   
-  
-  
-  
   res.status(200).json({
     success: true,
     data: result
-
-    
   });
 });
 
@@ -197,6 +185,10 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: {} });
 });
 
+
+// @desc    update Booking
+// @route   update /api/v1/bookings/:id
+// @access  Private
 exports.updateBooking = asyncHandler(async (req, res, next) => {
   const booking = await Booking.findById(req.params.id);
 
@@ -235,7 +227,7 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
 
   const updatedBooking = await Booking.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    { booking_day: newBookingDate },
     { new: true, runValidators: true }
   );
 

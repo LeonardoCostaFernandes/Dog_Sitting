@@ -4,6 +4,7 @@ const { addBooking,
         deleteBooking,
         getAllBookingsByDate, 
         getAllBookingsBetweenDates,
+        getAllBookings,
         updateBooking
         
       } = require('../controllers/booking');
@@ -30,6 +31,8 @@ router.route('/')
 
   router.route('/:date')
   .get(protect, getAllBookingsByDate);
-
+  
+  router.route('/all')
+  .get(protect, getAllBookings);
   
 module.exports = router;
