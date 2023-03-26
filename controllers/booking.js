@@ -49,14 +49,13 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
   const existingBookingsCount = await Booking.countDocuments({
     booking_day: { $eq: booking_day }
   });
-  
 
   console.log('existingBookingsCount:', existingBookingsCount);
   console.log(booking_day, "dia requisitado para reservar");
 
   // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada
-  // é maior ou igual a 10
-  if (existingBookingsCount + booking_day.length >= amountOfDogs) {
+  // é maior ou igual ao número máximo de cães permitidos
+  if (existingBookingsCount + 1 > amountOfDogs) {
     console.log('Não é possível realizar o booking por indisponibilidade de espaço');
     return res.status(400).json({ error: 'Não é possível realizar o booking por indisponibilidade de espaço' });
   }
@@ -70,7 +69,6 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
   const savedBooking = await booking.save();
 
   console.log('savedBooking:', savedBooking);
-
 
   res.status(201).json({
     success: true,
