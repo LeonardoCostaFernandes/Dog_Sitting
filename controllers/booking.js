@@ -4,11 +4,18 @@ const Booking = require('../models/Booking');
 const Dog = require('../models/Dog');
 const amountOfDogs = require('../config/amountOfDogs');
 
+
+//https://www.mongodb.com/docs/manual/core/aggregation-pipeline/
+
 // @desc    Add a booking
 // @route   POST /api/v1/bookings
 // @access  Private
 exports.addBooking = asyncHandler(async (req, res, next) => {
+  console.log("req.body",req.body);
+
   const { id_dog, booking_day, user } = req.body;
+  console.log("booking_day", booking_day);
+
 
   // Verifica se o id_dog existe na coleção Dogs
   const dog = await Dog.findById(id_dog);
@@ -23,13 +30,22 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
 
   const currentDate = new Date();
 
+  console.log("currentDate",currentDate)
+
   // Validating booking_day parameter to ensure that it is a valid date
-  if (isNaN(Date.parse(booking_day))) {
-    console.log('A data da reserva é inválida');
-    return res.status(400).json({ error: 'A data da reserva é inválida' });
+  for (let i = 0; i < booking_day.length; i++) {
+    const currentBookingDay = booking_day[i];
+  
+    if (isNaN(Date.parse(currentBookingDay))) {
+      console.log(`A data da reserva (${currentBookingDay}) é inválida`);
+      return res.status(400).json({ error: `A data da reserva (${currentBookingDay}) é inválida` });
+    }
   }
 
-  const bookingDate = new Date(booking_day);
+
+
+
+const bookingDate = new Date(req.body.booking_day[0]);
   console.log("bookingDate", bookingDate);
 
   // Verifica se a data da reserva é maior que a data atual
@@ -46,8 +62,7 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
   }
 
   // Verifica quantas reservas já existem para o dia informado
-  const existingBookingsCount = await Booking.countDocuments({
-    booking_day: { $eq: booking_day }
+  const existingBookingsCount = await Booking.countDocuments({id_dog: { $eq: id_dog }, booking_day: { $eq: booking_day }
   });
 
   console.log('existingBookingsCount:', existingBookingsCount);
