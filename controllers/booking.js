@@ -42,17 +42,18 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
     }
   }
 
-
-
-
-const bookingDate = new Date(req.body.booking_day[0]);
-  console.log("bookingDate", bookingDate);
-
-  // Verifica se a data da reserva é maior que a data atual
-  if (bookingDate.getTime() <= currentDate.getTime()) {
-    console.log('Não é possível realizar o booking para a data selecionada');
-    return res.status(400).json({ error: 'Não é possível realizar o booking para a data selecionada, escolha uma data posterior ao dia de hoje' });
+// Validando o parâmetro booking_day para garantir que todas as datas sejam válidas e sejam posteriores à data de hoje
+  for (let i = 0; i < req.body.booking_day.length; i++) {
+    const bookingDate = new Date(req.body.booking_day[i]);
+    console.log(`Booking Date ${i}:`, bookingDate);
+  
+    // Verifica se a data da reserva é maior que a data atual
+    if (bookingDate.getTime() <= currentDate.getTime()) {
+      console.log(`Não é possível realizar o booking para a data ${bookingDate}`);
+      return res.status(400).json({ error: `Não é possível realizar o booking para a data ${bookingDate}, escolha uma data posterior ao dia de hoje` });
+    }
   }
+
 
   // Verifica se já existe uma reserva para o mesmo cachorro e mesma data
   const existingBooking = await Booking.findOne({ id_dog: id_dog, booking_day: booking_day });
