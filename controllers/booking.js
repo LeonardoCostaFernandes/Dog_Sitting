@@ -2,7 +2,7 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Booking = require('../models/Booking');
 const Dog = require('../models/Dog');
-const amountOfDogs = require('../config/amountOfDogs');
+const maximum_amount_of_bookings = require('../config/maximum_amount_of_bookings');
 
 
 //https://www.mongodb.com/docs/manual/core/aggregation-pipeline/
@@ -55,32 +55,32 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
   }
 
 
-  // Verifica se já existe uma reserva para o mesmo cachorro e mesma data
-  const existingBooking = await Booking.findOne({ id_dog: id_dog, booking_day: booking_day });
-  if (existingBooking) {
-    console.log('Já existe uma reserva para esse cachorro nessa data');
-    return res.status(400).json({ error: 'Já existe uma reserva para esse cachorro nessa data' });
-  }
-
-  // Verifica quantas reservas já existem para o dia informado
-  const existingBookingsCount = await Booking.countDocuments({id_dog: { $eq: id_dog }, booking_day: { $eq: booking_day }
+  // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada para cada data individualmente
+for (const day of booking_day) {
+  const existingBookingsCount = await Booking.countDocuments({
+    booking_day: { $eq: day }
   });
-
-  console.log('existingBookingsCount:', existingBookingsCount);
-  console.log(booking_day, "dia requisitado para reservar");
-
-  // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada
-  // é maior ou igual ao número máximo de cães permitidos
-  if (existingBookingsCount + 1 > amountOfDogs) {
-    console.log('Não é possível realizar o booking por indisponibilidade de espaço');
-    return res.status(400).json({ error: 'Não é possível realizar o booking por indisponibilidade de espaço' });
+  
+  console.log("booking_day", booking_day);
+  console.log(`existingBookingsCount for ${day}:`, existingBookingsCount);
+  
+  // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada é maior ou igual ao número máximo de cães permitidos
+  if (existingBookingsCount + 1 > maximum_amount_of_bookings) {
+    console.log(`Não é possível realizar o booking para o dia ${day} por indisponibilidade de espaço`);
+    return res.status(400).json({ error: `Não é possível realizar o booking para o dia ${day} por indisponibilidade de espaço` });
   }
+  console.log("maximum_amount_of_bookings", maximum_amount_of_bookings);
 
-  const booking = new Booking({
-    id_dog,
-    booking_day,
-    user
-  });
+  if (existingBookingsCount + 1 > maximum_amount_of_bookings) {
+    break;
+  }
+}
+
+const booking = new Booking({
+  id_dog,
+  booking_day,
+  user
+});
 
   const savedBooking = await booking.save();
 
@@ -131,7 +131,8 @@ exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
 
   const bookings = await Booking.aggregate([
     { $match: { booking_day: { $eq: date } } },
-    { $group: { _id: "$booking_day", count: { $sum: 1 } } }
+    { $group: { _id: "$booking_day", count: { $sum: 1 }, bookings: { $push: "$$ROOT" } } },
+    { $project: { _id: 0, booking_day: "$_id", count: 1, bookings: 1 } }
   ]);
 
   console.log('bookings:', bookings);
@@ -248,7 +249,7 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
   console.log(newBookingDate, "requested date for booking");
 
   // Verifies if the sum of existing bookings and the booking being updated is greater than the maximum allowed
-  if (existingBookingsCount + 1 > amountOfDogs) {
+  if (existingBookingsCount + 1 > maximum_amount_of_bookings) {
     return res.status(400).json({ error: 'Cannot book due to lack of space' });
   }
 
