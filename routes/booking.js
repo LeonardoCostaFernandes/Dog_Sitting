@@ -15,24 +15,17 @@ const { protect } = require('../middleware/auth');
 router.route('/')
   .post(protect, addBooking)
   .get(protect, getBookings)
-  //.get(protect, getAllBookingsByDate )
-  //.get(protect, getAllBookingsBetweenDates);
-
   
-
-  router.route('/:id')
+router.route('/:id')
   .delete(protect, deleteBooking)
   .put(protect, updateBooking);
   
-
+router.route('/all')
+  .get(protect, getAllBookings);
   
-  router.route('/:startDate/:endDate')
+router.route('/:startDate/:endDate')
   .get(protect, getAllBookingsBetweenDates);
 
-  router.route('/:date')
-  .get(protect, getAllBookingsByDate);
   
-  router.route('/all')
-  .get(protect, getAllBookings);
   
 module.exports = router;

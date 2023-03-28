@@ -10,11 +10,6 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/auth');
 const dogsRouter = require('./routes/dog');
 const bookingsRouter = require('./routes/booking');
-const getAllBookingsByDate = require('./routes/booking');
-const getAllBookingsBetweenDates = require('./routes/booking');
-const updateBooking  = require('./routes/booking');
-
-
 
 // Load env vars (dotenv é usado para carregar as variáveis ​​de ambiente a partir do arquivo config.env)
 dotenv.config({ path: './config/config.env' });
@@ -45,15 +40,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1/auth', authRouter);
 
 app.use('/api/v1/dogs', dogsRouter);
-app.use('/api/v1/dogs/:id', dogsRouter);
+//app.use('/api/v1/dogs/:id', dogsRouter);
 
 app.use('/api/v1/bookings', bookingsRouter);
-app.use('/api/v1/bookings/:id', bookingsRouter);
-app.use('/api/v1/bookings/:id', updateBooking);
-app.use('/api/v1/bookings/:date', getAllBookingsByDate);
-app.use('/api/v1/bookings/:dataInicial/:dataFinal', getAllBookingsBetweenDates);  
-
-
 
 app.use(errorHandler);
 

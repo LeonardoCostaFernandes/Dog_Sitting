@@ -2,7 +2,7 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Booking = require('../models/Booking');
 const Dog = require('../models/Dog');
-const maximum_amount_of_bookings = require('../config/maximum_amount_of_bookings');
+const {config} = require('../config/maximum_amount_of_bookings');
 
 
 //https://www.mongodb.com/docs/manual/core/aggregation-pipeline/
@@ -55,7 +55,7 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
   }
 
 
-  // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada para cada data individualmente
+// Verifica se a soma das reservas existentes e a reserva que está sendo adicionada para cada data individualmente
 for (const day of booking_day) {
   const existingBookingsCount = await Booking.countDocuments({
     booking_day: { $eq: day }
@@ -64,28 +64,29 @@ for (const day of booking_day) {
   console.log("booking_day", booking_day);
   console.log(`existingBookingsCount for ${day}:`, existingBookingsCount);
   
+  //avaliando o tipo 
+  console.log(typeof existingBookingsCount );
+  console.log(typeof config.maximum_amount_of_bookings );
+
+
   // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada é maior ou igual ao número máximo de cães permitidos
-  if (existingBookingsCount + 1 > maximum_amount_of_bookings) {
+  if (existingBookingsCount + 1 > config.maximum_amount_of_bookings) {
     console.log(`Não é possível realizar o booking para o dia ${day} por indisponibilidade de espaço`);
     return res.status(400).json({ error: `Não é possível realizar o booking para o dia ${day} por indisponibilidade de espaço` });
   }
-  console.log("maximum_amount_of_bookings", maximum_amount_of_bookings);
-
-  if (existingBookingsCount + 1 > maximum_amount_of_bookings) {
+  console.log("maximum_amount_of_bookings", config.maximum_amount_of_bookings);
+  
+  if (existingBookingsCount + 1 > config.maximum_amount_of_bookings) {
     break;
   }
 }
-
 const booking = new Booking({
   id_dog,
   booking_day,
   user
 });
-
   const savedBooking = await booking.save();
-
   console.log('savedBooking:', savedBooking);
-
   res.status(201).json({
     success: true,
     data: savedBooking
@@ -111,8 +112,9 @@ exports.getBookings = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/bookings/all
 // @access    Public
 exports.getAllBookings = asyncHandler(async (req, res, next) => { 
-
+  console.log("xpto");
   const bookings = await Booking.find();
+  
   res.status(200).json({
     success: true,
     data: bookings
@@ -128,7 +130,7 @@ exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
    * @param {string} req.params.date - The date in format 'YYYY-MM-DD'
    */
   const date = new Date(req.params.date);
-
+console.log("xpto data");
   const bookings = await Booking.aggregate([
     { $match: { booking_day: { $eq: date } } },
     { $group: { _id: "$booking_day", count: { $sum: 1 }, bookings: { $push: "$$ROOT" } } },
@@ -227,6 +229,8 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/bookings/:id
 // @access  Private
 exports.updateBooking = asyncHandler(async (req, res, next) => {
+  console.log("req.body",req.body);
+  
   const booking = await Booking.findById(req.params.id);
 
   if (!booking) {
@@ -237,17 +241,23 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
 
   const { booking_day } = req.body;
   const currentDate = new Date();
-  const newBookingDate = new Date(booking_day);
-  console.log("newBookingDate", newBookingDate);
-  console.log('existingBookingsCount:', booking.existingBookingsCount);
+  //const newBookingDate = new Date(booking_day);
+  //console.log("newBookingDate", newBookingDate);
+  //console.log('existingBookingsCount:', booking.existingBookingsCount);
 
+
+  
   // Verifies if the booking day is a valid date
   if (isNaN(Date.parse(booking_day))) {
     return res.status(400).json({ error: 'Invalid date' });
   }
 
+  
+
   // Verifies if the new booking date is greater than the current date
-  if (newBookingDate.getTime() <= currentDate.getTime()) {
+  const newBookingDate = new Date(booking_day);
+  console.log("newBookingDate", newBookingDate);
+  if (newBookingDate.getTime() < currentDate.getTime()) {
     return res.status(400).json({ error: 'Cannot book for the selected date, choose a date after today' });
   }
 
@@ -263,17 +273,16 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
   console.log(newBookingDate, "requested date for booking");
 
   // Verifies if the sum of existing bookings and the booking being updated is greater than the maximum allowed
-  if (existingBookingsCount + 1 > maximum_amount_of_bookings) {
+  if (existingBookingsCount >= maximum_amount_of_bookings) {
     return res.status(400).json({ error: 'Cannot book due to lack of space' });
   }
 
-  const updatedBooking = await Booking.findByIdAndUpdate(
-    req.params.id,
-    { booking_day: newBookingDate },
-    { new: true, runValidators: true }
-  );
+  // Updates the booking day field of the booking
+  booking.booking_day = [booking_day];
+  const savedBooking = await booking.save();
 
-  console.log("req.params.id", req.params.id);
-
-  res.status(200).json({ success: true, data: updatedBooking });
+  res.status(200).json({
+    success: true,
+    data: savedBooking
+  });
 });
