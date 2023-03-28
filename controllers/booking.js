@@ -147,40 +147,54 @@ exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/bookings/:startDate/:endDate
 // @access  Public
 exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
-  const startDate = new Date(req.params.startDate);
-  const endDate = new Date(req.params.endDate);
+  try {
+    const startDate = new Date(req.params.startDate);
+    const endDate = new Date(req.params.endDate);
 
-  const bookings = await Booking.find({
-    booking_day: {
-      $gte: startDate,
-      $lte: endDate
-    }
-  });
+    const bookings = await Booking.find({
+      booking_day: {
+        $gte: startDate,
+        $lte: endDate
+      }
+    });
 
-  const bookingDays = bookings.map(booking => booking.booking_day.toISOString().slice(0, 10));
-  
-  // Inicializa um objeto para armazenar as contagens
-  const counts = {};
-  
-  // Atualiza as contagens para cada data
-  bookingDays.forEach(date => {
-    counts[date] = counts[date] ? counts[date] + 1 : 1;
-  });
-  
-  // Cria um array de objetos com as contagens para cada data
-  const result = Object.keys(counts).map(date => ({ booking_day: new Date(date), count: counts[date] }));
+    const bookingDays = bookings.map(booking => {
+      const bookingDate = new Date(booking.booking_day);
+      return bookingDate.toISOString().slice(0, 10);
+    });
 
-  console.log('bookings:', bookings);
-  console.log('startDate:', startDate);
-  console.log('endDate:', endDate);
-  console.log('req.params.startDate:', req.params.startDate);
-  console.log('req.params.endDate:', req.params.endDate);
-  console.log('bookingDays:', bookingDays);
-  
-  res.status(200).json({
-    success: true,
-    data: result
-  });
+    // Inicializa um objeto para armazenar as contagens
+    const counts = {};
+
+    // Atualiza as contagens para cada data
+    bookingDays.forEach(date => {
+      counts[date] = counts[date] ? counts[date] + 1 : 1;
+    });
+
+    // Cria um array de objetos com as contagens para cada data
+    const result = Object.keys(counts).map(date => ({
+      booking_day: new Date(date),
+      count: counts[date]
+    }));
+
+    console.log('bookings:', bookings);
+    console.log('startDate:', startDate);
+    console.log('endDate:', endDate);
+    console.log('req.params.startDate:', req.params.startDate);
+    console.log('req.params.endDate:', req.params.endDate);
+    console.log('bookingDays:', bookingDays);
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    // Se ocorrer um erro, envie uma resposta de erro com uma mensagem apropriada
+    res.status(500).json({
+      success: false,
+      error: 'Ocorreu um erro ao buscar as reservas.'
+    });
+  }
 });
 
 // @desc    Delete booking

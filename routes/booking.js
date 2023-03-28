@@ -26,7 +26,7 @@ router.route('/')
   
 
   
-  router.route('/:dataInicial/:dataFinal')
+  router.route('/:startDate/:endDate')
   .get(protect, getAllBookingsBetweenDates);
 
   router.route('/:date')
