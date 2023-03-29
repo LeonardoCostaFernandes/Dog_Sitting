@@ -215,10 +215,8 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/bookings/:id
 // @access  Private
 exports.updateBooking = asyncHandler(async (req, res, next) => {
- 
-  
  const booking = await Booking.findById(req.params.id);
-  console.log("req.params.id",req.params.id);
+ console.log("req.params.id",req.params.id);
  if (!booking) {
   return next(
    new ErrorResponse(`Booking not found with id of ${req.params.id}`, 404)
@@ -226,13 +224,15 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
  }
 
  const { booking_day } = req.body;
- const currentDate = new Date();
+	const currentDate = new Date();
  
  // Verifies if the booking day is a valid date
  if (isNaN(Date.parse(booking_day))) {
+  console.log("booking_day", booking_day);
   return res.status(400).json({ error: 'Invalid date' });
- }
+	}
 
+	console.log("booking_day", booking_day);
  // Verifies if the new booking date is greater than the current date
  const newBookingDate = new Date(booking_day);
  console.log("newBookingDate", newBookingDate);
@@ -252,7 +252,7 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
  console.log(newBookingDate, "requested date for booking");
 
  // Verifies if the sum of existing bookings and the booking being updated is greater than the maximum allowed
- if (existingBookingsCount >= maximum_amount_of_bookings) {
+ if (existingBookingsCount >= config.maximum_amount_of_bookings) {
   return res.status(400).json({ error: 'Cannot book due to lack of space' });
  }
 
