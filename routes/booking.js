@@ -23,8 +23,10 @@ router.route('/:id')
 router.route('/all')
 	.get(protect, getAllBookings);
   
-router.route('/:startDate/:endDate')
-.get(protect, getAllBookingsByDate)
+router.route('/byOneDate/:startDate')
+.get(protect, getAllBookingsByDate);
+
+router.route('/byDates/:startDate/:endDate')
 .get(protect, getAllBookingsBetweenDates);
 
 router.route('/available/:startDate/:endDate')

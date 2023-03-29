@@ -110,13 +110,13 @@ exports.getAllBookings = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get all bookings for a specific date with day counter
-// @route   GET /api/v1/bookings/:date
+// @route   GET /api/v1/bookings/byOneDate/:startDate
 // @access  Public
 exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
  /**
   * @param {string} req.params.date - The date in format 'YYYY-MM-DD'
   */
- const date = new Date(req.params.date);
+ const date = new Date(req.params.startDate);
  const bookings = await Booking.aggregate([
   { $match: { booking_day: { $eq: date } } },
   { $group: { _id: "$booking_day", count: { $sum: 1 }, bookings: { $push: "$$ROOT" } } },
@@ -279,7 +279,8 @@ exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 
 			const startDate = new Date(req.params.startDate);
 			const endDate = new Date(req.params.endDate);
-
+			console.log(typeof startDate );
+			console.log(typeof endDate );
 			console.log("startDate", startDate);
 			console.log("endDate", endDate);
 
@@ -299,34 +300,46 @@ exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 					});
 			}
 
-			const bookingDays = {};
+     
+			//const bookingDays = {};
 
 			// Busca todas as reservas dentro do intervalo de datas
 			const bookings = await Booking.find({
-					booking_day: { $gte: startDate, $lte: endDate }
+				booking_day: {
+					$gte: startDate,
+					$lte: endDate 
+				}
 			});
 
 			console.log('bookings:', bookings);
 
 			// Conta quantas reservas há para cada dia dentro do intervalo de datas
-			bookings.forEach(booking => {
-					const bookingDate = new Date(booking.booking_day).toISOString().slice(0, 10);
-					if (!bookingDays[bookingDate]) {
-							bookingDays[bookingDate] = 1;
-					} else {
-							bookingDays[bookingDate]++;
-					}
+			const bookingDays = bookings.map(booking => {
+  				const bookingDate = new Date(booking.booking_day);
+						return bookingDate.toISOString().slice(0, 10);
+					
 			});
 
+			// Inicializa um objeto para armazenar as contagens
+  const counts = {};
+		// Atualiza as contagens para cada data
+  for (const date of bookingDays) {
+			counts[date] = (counts[date] || 0) + 1;
+	}
 			console.log('bookingDays:', bookingDays);
 
 			// Cria um array de objetos com as contagens para cada data
-			const result = Object.keys(bookingDays).map(date => ({
-					booking_day: date,
-					count: bookingDays[date]
+			const result = Object.keys(counts).map(date => ({
+					booking_day: new Date(date),
+					count: counts[date]
 			}));
 
-			console.log('result:', result);
+			console.log('bookings:', bookings);
+  console.log('startDate:', startDate);
+  console.log('endDate:', endDate);
+  console.log('req.params.startDate:', req.params.startDate);
+  console.log('req.params.endDate:', req.params.endDate);
+  console.log('bookingDays:', bookingDays);
 
 			res.status(200).json({
 					success: true,
