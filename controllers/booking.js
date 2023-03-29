@@ -269,6 +269,7 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
 
 // @desc    Get all available booking dates
 // @route   GET /api/v1/bookings/available/:startDate/:endDate
+//http://localhost:4000/api/v1/bookings/available/start_date=24-04-01&end_date=24-04-03
 // @access  Public
 exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 	try {
@@ -328,10 +329,17 @@ exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 	}
 			console.log('bookingDays:', bookingDays);
 
+// Calcula o número de vagas disponíveis em cada dia
+const totalSlots = 10; // número total de vagas disponíveis por dia
+const availableSlots = {};
+for (const date of Object.keys(counts)) {
+		availableSlots[date] = totalSlots - counts[date];
+}
 			// Cria um array de objetos com as contagens para cada data
 			const result = Object.keys(counts).map(date => ({
 					booking_day: new Date(date),
-					count: counts[date]
+					count: counts[date],
+					"vagas disponíveis": availableSlots[date]
 			}));
 
 			console.log('bookings:', bookings);
