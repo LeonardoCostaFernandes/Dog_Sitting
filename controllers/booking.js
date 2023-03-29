@@ -329,7 +329,7 @@ exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 		console.log('bookingDays:', bookingDays);
 
 		// Calcula o número de vagas disponíveis em cada dia
-		const totalSlots = 10; // número total de vagas disponíveis por dia
+		const totalSlots = config.maximum_amount_of_bookings; // número total de vagas disponíveis por dia
 		const availableSlots = {};
 		for (const date of Object.keys(counts)) {
 			availableSlots[date] = totalSlots - counts[date];
@@ -359,7 +359,10 @@ exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
   console.log('req.params.startDate:', req.params.startDate);
   console.log('req.params.endDate:', req.params.endDate);
   console.log('bookingDays:', bookingDays);
-
+		
+		// Ordena o resultado por datas crescentes
+		result.sort((a, b) => a.booking_day - b.booking_day)
+		
 		res.status(200).json({
 			success: true,
 			data: result
