@@ -273,93 +273,105 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
 // @access  Public
 exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 	try {
-			/**
-				* @param {string} req.params.startDate - The date in format 'YYYY-MM-DD'
-				* @param {string} req.params.endDate - The date in format 'YYYY-MM-DD'
-				*/
+		/**
+			* @param {string} req.params.startDate - The date in format 'YYYY-MM-DD'
+			* @param {string} req.params.endDate - The date in format 'YYYY-MM-DD'
+			*/
 
-			const startDate = new Date(req.params.startDate);
-			const endDate = new Date(req.params.endDate);
-			console.log(typeof startDate );
-			console.log(typeof endDate );
-			console.log("startDate", startDate);
-			console.log("endDate", endDate);
+		const startDate = new Date(req.params.startDate);
+		const endDate = new Date(req.params.endDate);
+		console.log(typeof startDate );
+		console.log(typeof endDate );
+		console.log("startDate", startDate);
+		console.log("endDate", endDate);
 
-			// Verifica se as datas de início e fim são válidas
-			if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-					console.log("Invalid start or end date");
-					return res.status(400).json({
-							error: 'As datas de início e/ou fim são inválidas'
-					});
-			}
+		// Verifica se as datas de início e fim são válidas
+		if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+			console.log("Invalid start or end date");
+			return res.status(400).json({
+				error: 'As datas de início e/ou fim são inválidas'
+			});
+		}
 
-			// Verifica se a data de início é menor ou igual à data de fim
-			if (startDate > endDate) {
-					console.log("Start date is after end date");
-					return res.status(400).json({
-							error: 'A data de início deve ser anterior ou igual à data de fim'
-					});
-			}
+		// Verifica se a data de início é menor ou igual à data de fim
+		if (startDate > endDate) {
+			console.log("Start date is after end date");
+			return res.status(400).json({
+				error: 'A data de início deve ser anterior ou igual à data de fim'
+			});
+		}
 
      
-			//const bookingDays = {};
+		//const bookingDays = {};
 
-			// Busca todas as reservas dentro do intervalo de datas
-			const bookings = await Booking.find({
-				booking_day: {
-					$gte: startDate,
-					$lte: endDate 
-				}
-			});
+		// Busca todas as reservas dentro do intervalo de datas
+		const bookings = await Booking.find({
+			booking_day: {
+				$gte: startDate,
+				$lte: endDate 
+			}
+		});
 
-			console.log('bookings:', bookings);
+		console.log('bookings:', bookings);
 
-			// Conta quantas reservas há para cada dia dentro do intervalo de datas
-			const bookingDays = bookings.map(booking => {
-  				const bookingDate = new Date(booking.booking_day);
-						return bookingDate.toISOString().slice(0, 10);
-					
-			});
+		// Conta quantas reservas há para cada dia dentro do intervalo de datas
+		const bookingDays = bookings.map(booking => {
+			const bookingDate = new Date(booking.booking_day);
+			return bookingDate.toISOString().slice(0, 10);
+		});
 
-			// Inicializa um objeto para armazenar as contagens
+		// Inicializa um objeto para armazenar as contagens
   const counts = {};
 		// Atualiza as contagens para cada data
   for (const date of bookingDays) {
 			counts[date] = (counts[date] || 0) + 1;
-	}
-			console.log('bookingDays:', bookingDays);
+		}
+		console.log('bookingDays:', bookingDays);
 
-// Calcula o número de vagas disponíveis em cada dia
-const totalSlots = 10; // número total de vagas disponíveis por dia
-const availableSlots = {};
-for (const date of Object.keys(counts)) {
-		availableSlots[date] = totalSlots - counts[date];
-}
-			// Cria um array de objetos com as contagens para cada data
-			const result = Object.keys(counts).map(date => ({
-					booking_day: new Date(date),
-					count: counts[date],
-					"vagas disponíveis": availableSlots[date]
-			}));
+		// Calcula o número de vagas disponíveis em cada dia
+		const totalSlots = 10; // número total de vagas disponíveis por dia
+		const availableSlots = {};
+		for (const date of Object.keys(counts)) {
+			availableSlots[date] = totalSlots - counts[date];
+		}
 
-			console.log('bookings:', bookings);
+		// Adiciona os dias sem reservas ao objeto counts com vagas disponíveis iguais ao total de vagas
+		const currentDate = new Date(startDate);
+		while (currentDate <= endDate) {
+			const currentDateString = currentDate.toISOString().slice(0, 10);
+			if (!(currentDateString in counts)) {
+				counts[currentDateString] = 0;
+				availableSlots[currentDateString] = totalSlots;
+			}
+			currentDate.setDate(currentDate.getDate() + 1);
+		}
+
+		// Cria um array de objetos com as contagens para cada data
+		const result = Object.keys(counts).map(date => ({
+			booking_day: new Date(date),
+			count: counts[date],
+			"vagas disponíveis": availableSlots[date]
+		}));
+
+		console.log('bookings:', bookings);
   console.log('startDate:', startDate);
   console.log('endDate:', endDate);
   console.log('req.params.startDate:', req.params.startDate);
   console.log('req.params.endDate:', req.params.endDate);
   console.log('bookingDays:', bookingDays);
 
-			res.status(200).json({
-					success: true,
-					data: result
-			});
-	} catch (error) {
-			// Se ocorrer um erro, envie uma resposta de erro com uma mensagem apropriada
-			console.log("Error:", error.message);
-			res.status(500).json({
-					success: false,
-					error: 'Ocorreu um erro ao buscar as reservas.'
-			});
+		res.status(200).json({
+			success: true,
+			data: result
+		});
+	} 
+	catch (error) {
+		// Se ocorrer um erro, envie uma resposta de erro com uma mensagem apropriada
+		console.log("Error:", error.message);
+		res.status(500).json({
+			success: false,
+			error: 'Ocorreu um erro ao buscar as reservas.'
+		});
 	}
 });
 
