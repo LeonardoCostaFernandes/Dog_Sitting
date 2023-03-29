@@ -5,7 +5,8 @@ const { addBooking,
 	getAllBookingsByDate, 
 	getAllBookingsBetweenDates,
 	getAllBookings,
-	updateBooking
+	updateBooking,
+	allDatesOpenForBooking
 } = require('../controllers/booking');
 
 const router = express.Router({ mergeParams: true });
@@ -23,6 +24,10 @@ router.route('/all')
 	.get(protect, getAllBookings);
   
 router.route('/:startDate/:endDate')
-	.get(protect, getAllBookingsBetweenDates);
+.get(protect, getAllBookingsByDate)
+.get(protect, getAllBookingsBetweenDates);
+
+router.route('/available/:startDate/:endDate')
+.get(protect, allDatesOpenForBooking);
 
 	module.exports = router;

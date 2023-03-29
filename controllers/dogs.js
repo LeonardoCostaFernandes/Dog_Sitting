@@ -34,7 +34,7 @@ exports.getDogs = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.deleteDog = asyncHandler(async (req, res, next) => {
 	const dog = await Dog.findById(req.params.id);
-
+	console.log('dog:', dog);
 	if (!dog) {
 		return next(
 			new ErrorResponse(`Dog not found with id of ${req.params.id}`, 404)

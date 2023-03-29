@@ -40,7 +40,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1/auth', authRouter);
 
 app.use('/api/v1/dogs', dogsRouter);
-//app.use('/api/v1/dogs/:id', dogsRouter);
 
 app.use('/api/v1/bookings', bookingsRouter);
 

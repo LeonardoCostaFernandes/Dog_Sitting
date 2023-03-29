@@ -215,10 +215,10 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/bookings/:id
 // @access  Private
 exports.updateBooking = asyncHandler(async (req, res, next) => {
- console.log("req.body",req.body);
+ 
   
  const booking = await Booking.findById(req.params.id);
-
+  console.log("req.params.id",req.params.id);
  if (!booking) {
   return next(
    new ErrorResponse(`Booking not found with id of ${req.params.id}`, 404)
@@ -265,3 +265,80 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
   data: savedBooking
  });
 });
+
+
+// @desc    Get all available booking dates
+// @route   GET /api/v1/bookings/available/:startDate/:endDate
+// @access  Public
+exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
+	try {
+			/**
+				* @param {string} req.params.startDate - The date in format 'YYYY-MM-DD'
+				* @param {string} req.params.endDate - The date in format 'YYYY-MM-DD'
+				*/
+
+			const startDate = new Date(req.params.startDate);
+			const endDate = new Date(req.params.endDate);
+
+			console.log("startDate", startDate);
+			console.log("endDate", endDate);
+
+			// Verifica se as datas de início e fim são válidas
+			if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+					console.log("Invalid start or end date");
+					return res.status(400).json({
+							error: 'As datas de início e/ou fim são inválidas'
+					});
+			}
+
+			// Verifica se a data de início é menor ou igual à data de fim
+			if (startDate > endDate) {
+					console.log("Start date is after end date");
+					return res.status(400).json({
+							error: 'A data de início deve ser anterior ou igual à data de fim'
+					});
+			}
+
+			const bookingDays = {};
+
+			// Busca todas as reservas dentro do intervalo de datas
+			const bookings = await Booking.find({
+					booking_day: { $gte: startDate, $lte: endDate }
+			});
+
+			console.log('bookings:', bookings);
+
+			// Conta quantas reservas há para cada dia dentro do intervalo de datas
+			bookings.forEach(booking => {
+					const bookingDate = new Date(booking.booking_day).toISOString().slice(0, 10);
+					if (!bookingDays[bookingDate]) {
+							bookingDays[bookingDate] = 1;
+					} else {
+							bookingDays[bookingDate]++;
+					}
+			});
+
+			console.log('bookingDays:', bookingDays);
+
+			// Cria um array de objetos com as contagens para cada data
+			const result = Object.keys(bookingDays).map(date => ({
+					booking_day: date,
+					count: bookingDays[date]
+			}));
+
+			console.log('result:', result);
+
+			res.status(200).json({
+					success: true,
+					data: result
+			});
+	} catch (error) {
+			// Se ocorrer um erro, envie uma resposta de erro com uma mensagem apropriada
+			console.log("Error:", error.message);
+			res.status(500).json({
+					success: false,
+					error: 'Ocorreu um erro ao buscar as reservas.'
+			});
+	}
+});
+
