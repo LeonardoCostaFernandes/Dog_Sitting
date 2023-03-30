@@ -8,6 +8,11 @@ const UserSchema = new mongoose.Schema({
 		type: String,
 		required: [true, 'Please add a name']
 	},
+	role: {
+		type: String,
+		enum: ['user', 'admin'],
+		default: 'user'
+},
 	nif: {
 		type: Number,
 		required: [true, 'Por favor, adicione um número de identificação'],

@@ -10,7 +10,7 @@ const { addBooking,
 } = require('../controllers/booking');
 
 const router = express.Router({ mergeParams: true });
-const { protect } = require('../middleware/auth');
+const { protect, authorize  } = require('../middleware/auth');
 
 router.route('/')
 	.post(protect, addBooking)
@@ -21,15 +21,15 @@ router.route('/:id')
 	.put(protect, updateBooking);
   
 router.route('/all')
-	.get(protect, getAllBookings);
+	.get(protect, authorize('admin'), getAllBookings);
   
 router.route('/byOneDate/:startDate')
-.get(protect, getAllBookingsByDate);
+	.get(protect, getAllBookingsByDate);
 
 router.route('/byDates/:startDate/:endDate')
-.get(protect, getAllBookingsBetweenDates);
+	.get(protect, getAllBookingsBetweenDates);
 
 router.route('/available/:startDate/:endDate')
-.get(protect, allDatesOpenForBooking);
+	.get(protect, allDatesOpenForBooking);
 
 	module.exports = router;

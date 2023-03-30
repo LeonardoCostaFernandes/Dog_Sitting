@@ -3,11 +3,11 @@ const { addDog, getDogs, dogPhotoUpload, deleteDog } = require('../controllers/d
 
 const router = express.Router({ mergeParams: true });
 
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 router.route('/')
 	.post(protect, addDog)
-	.get(protect, getDogs);
+	.get(protect,authorize('admin'),getDogs);
 
 router.route('/:id/photo').put(dogPhotoUpload);
   

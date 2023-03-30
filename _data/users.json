@@ -1,50 +1,124 @@
 [
- {
-   "name": "Batata 00",
-   "email": "Batata00@example.com",
-   "address": "Avenida da loiberdade 30",
-   "phone": "Avenida da loiberdade 30",
-   "password": "123456"
- },
- {
-   "name": "Batata 01",
-   "email": "Batata01@example.com",
-   "address": "Avenida da loiberdade 30",
-    "phone": "Avenida da loiberdade 30",
-   "password": "123456"
- },
- {
-  "name": "Batata 02",
-  "email": "Batata02@example.com",
-  "address": "Avenida da liberdade, nº 30",
-   "phone": "Avenida da loiberdade 30",
-  "password": "123456"
-},
-{
- "name": "Batata 03",
- "email": "Batata03@example.com",
- "address": "Avenida da loiberdade, 30",
-  "phone": "Avenida da loiberdade 30",
- "password": "123456"
-}
+	{
+		"name":"Batata 01",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata01@tuberculo.com",
+		"address":"Champs-Élysées, Paris",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Batata 02",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata02@tuberculo.com",
+		"address":"Wall Street, Nova York",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Batata 03",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata03@tuberculo.com",
+		"address":"Calçada da Fama de Hollywood, Los Angeles",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Batata 04",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata04@tuberculo.com",
+		"address":"Abbey Road, Londres",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Batata 05",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata05@tuberculo.com",
+		"address":"Lombard Street, São Francisco",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Batata 06",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata06@tuberculo.com",
+		"address":"La Rambla Fonte",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Batata 07",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata07@tuberculo.com",
+		"address":"Orchard Road",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Batata 08",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata08@tuberculo.com",
+		"address":"Khao San Road Fonte",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Batata 09",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata09@tuberculo.com",
+		"address":"Via Dolorosa",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Batata 10",
+		"role":"user",
+		"nif":123456789,
+		"email":"batata10@tuberculo.com",
+		"address":"Las Vegas Boulevard South",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
+	,
+	{
+		"name":"Admin Passeio Amigo Lisboa",
+		"role":"publisher",
+		"nif":123456789,
+		"email":"admin@passeioamigo.com",
+		"address":"Rua Augusta, 01",
+		"location":"",
+		"phone":999999999,
+		"password":"123456"
+	}
 ]
 
-
-/*
-register user
-{
-		"name": "babata05",
-		"email": "babata05@gmail.com",
-		"password": "123456"
-	}
-  */
-
-
-  /*
-  login user
-  	{
-		"email": "babata05@gmail.com",
-		"password": "123456"
-	}
-  */
-  
+ 

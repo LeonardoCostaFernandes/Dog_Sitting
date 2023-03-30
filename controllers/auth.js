@@ -9,11 +9,12 @@ const path = require('path');
 // @route     POST /api/v1/auth/register
 // @access    Public
 exports.register = asyncHandler(async (req, res, next) => {
- const { name, email, nif, password, address, phone } = req.body;
+ const { name, role, email, nif, password, address, phone } = req.body;
 
  // Create user
  const user = await User.create({
   name,
+  role,
   email,
   address,
   phone,
