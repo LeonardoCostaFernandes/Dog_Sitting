@@ -6,13 +6,14 @@ const router = express.Router({ mergeParams: true });
 const { protect, authorize } = require('../middleware/auth');
 
 router.route('/')
-	.post(protect, addDog)
-	.get(protect,authorize('admin'),getDogs);
+	.post(protect, authorize('user','admin'),addDog)
+	.get(protect,authorize('admin'),getDogs); //somente admin
 
-router.route('/:id/photo').put(dogPhotoUpload);
+router.route('/:id/photo')
+.put(protect, authorize('user','admin'),dogPhotoUpload);
   
 router.route('/:id')
-	.delete(protect, deleteDog);
+	.delete(protect, authorize('user','admin'), deleteDog);
 module.exports = router;
 
 

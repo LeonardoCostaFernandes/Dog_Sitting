@@ -1,11 +1,21 @@
 const express = require('express');
 const { register, login, logout, getMe, authPhotoUpload} = require('../controllers/auth');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
-router.post('/register', register);
-router.post('/login', login);
-router.get('/me', protect, getMe);
-router.get('/logout', protect, logout);
-router.route('/:id/photo').put(authPhotoUpload);
+const { protect, authorize } = require('../middleware/auth');
+
+router.route('/register')
+.post(register); //qualquer um
+
+router.route('/login')
+.post(login); //qualquer um
+
+router.route('/me')
+.get(protect, authorize('user','admin'),protect, getMe);
+
+router.route('/logout')
+.get(protect, authorize('user','admin'), logout);
+
+router.route('/:id/photo')
+.put(protect, authorize('user','admin'),authPhotoUpload);
 
 module.exports = router;

@@ -13,23 +13,23 @@ const router = express.Router({ mergeParams: true });
 const { protect, authorize  } = require('../middleware/auth');
 
 router.route('/')
-	.post(protect, addBooking)
-	.get(protect, getBookings)
+	.post(protect, authorize('user','admin'), addBooking)
+	.get(protect, authorize('user','admin'), getBookings)
   
 router.route('/:id')
-	.delete(protect, deleteBooking)
-	.put(protect, updateBooking);
+	.delete(protect, authorize('user','admin'), deleteBooking)
+	.put(protect, authorize('user','admin'), updateBooking);
   
 router.route('/all')
-	.get(protect, authorize('admin'), getAllBookings);
+	.get(protect, authorize('admin'), getAllBookings); //somente admin
   
 router.route('/byOneDate/:startDate')
-	.get(protect, getAllBookingsByDate);
+	.get(protect, authorize('admin'), getAllBookingsByDate); //somente admin
 
 router.route('/byDates/:startDate/:endDate')
-	.get(protect, getAllBookingsBetweenDates);
+	.get(protect, authorize('admin'), getAllBookingsBetweenDates); //somente admin
 
 router.route('/available/:startDate/:endDate')
-	.get(protect, allDatesOpenForBooking);
+	.get(allDatesOpenForBooking); //qualquer um, mesmo sem cadastro
 
 	module.exports = router;
