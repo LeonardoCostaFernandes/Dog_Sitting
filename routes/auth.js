@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, logout, getMe, authPhotoUpload} = require('../controllers/auth');
+const { register, login, logout, getMe, authPhotoUpload, updateUser} = require('../controllers/auth');
 const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
 
@@ -17,5 +17,8 @@ router.route('/logout')
 
 router.route('/:id/photo')
 .put(protect, authorize('user','admin'),authPhotoUpload);
+
+router.route('/:id')
+.put(protect, authorize('user','admin'),updateUser);
 
 module.exports = router;

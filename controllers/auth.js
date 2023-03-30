@@ -170,3 +170,53 @@ exports.authPhotoUpload = asyncHandler(async (req, res, next) => {
  });
  
 });
+
+// @desc      Update user
+// @route     PUT /api/v1/auth/:id
+// @access    Private
+exports.updateUser = asyncHandler(async (req, res, next) => {
+	console.log("Entering updateUser function");
+	const { name, role, email, nif, password, address, phone } = req.body;
+	console.log("Request body: ", req.body);
+
+	let user = await User.findById(req.params.id);
+	console.log("User found by ID: ", user);
+
+	if (!user) {
+		console.log("User not found with id of ", req.params.id);
+		return next(
+			new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+		);
+	}
+
+	// Make sure user is the owner
+	if (user._id.toString() !== req.user.id && req.user.role !== 'admin') {
+		console.log("Not authorized to update this user");
+		return next(
+			new ErrorResponse(`Not authorized to update this user`, 401)
+		);
+	}
+
+	user = await User.findByIdAndUpdate(
+		req.params.id,
+		{
+			name,
+			role,
+			email,
+			nif,
+			password,
+			address,
+			phone
+		},
+		{
+			new: true,
+			runValidators: true
+		}
+	);
+	console.log("User updated: ", user);
+
+	res.status(200).json({
+		success: true,
+		data: user
+	});
+});
