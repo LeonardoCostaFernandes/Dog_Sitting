@@ -48,6 +48,14 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
   }
  }
 
+ //adicionando um valor para as reservas realizadas
+ let totalDays = 0;
+ for (let i = 0; i < booking_day.length; i++) {
+   const currentBookingDay = booking_day[i];
+   const bookingDate = new Date(currentBookingDay);
+   totalDays++;
+ }
+
  // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada para cada data individualmente
  for (const day of booking_day) {
   const existingBookingsCount = await Booking.countDocuments({
@@ -70,7 +78,7 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
   if (existingBookingsCount + 1 > config.maximum_amount_of_bookings) {
    break;
   }
-}
+  }
 
  const booking = new Booking({
   id_dog,
@@ -79,12 +87,18 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
  });
  const savedBooking = await booking.save();
  console.log('savedBooking:', savedBooking);
- res.status(201).json({
-  success: true,
-  data: savedBooking
- });
-});
 
+ if (savedBooking) {
+  const totalPrice = totalDays * 50;
+ 	res.status(201).json({
+			success: true,
+			message: `A reserva foi concluída com sucesso para ${totalDays} dia(s). O preço total é € ${totalPrice}.`,
+			data: savedBooking,
+ });
+	} else {
+		return res.status(500).json({ error: 'Houve um erro ao salvar a reserva.' });
+	};
+});
 
 // @desc    Get all bookings for a user
 // @route   GET /api/v1/bookings
