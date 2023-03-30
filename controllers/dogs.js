@@ -106,3 +106,30 @@ exports.dogPhotoUpload = asyncHandler(async (req, res, next) => {
 	});
   
 });
+
+// @desc    Update a dog
+// @route   PUT /api/v1/dogs/:id
+// @access  Private
+exports.updateDog = asyncHandler(async (req, res, next) => {
+	let dog = await Dog.findById(req.params.id);
+
+	if (!dog) {
+		return next(
+			new ErrorResponse(`Dog not found with id of ${req.params.id}`, 404)
+		);
+	}
+
+	// Verificar se o usuário logado é o mesmo que criou o registro
+	if (dog.user.toString() !== req.user.id && req.user.role !== 'admin') {
+		return next(
+			new ErrorResponse(`Not authorized to update this dog`, 401)
+		);
+	}
+
+	dog = await Dog.findByIdAndUpdate(req.params.id, req.body, {
+		new: true,
+		runValidators: true
+	});
+
+	res.status(200).json({ success: true, data: dog });
+});
