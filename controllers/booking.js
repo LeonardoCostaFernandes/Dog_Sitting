@@ -89,7 +89,7 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
  console.log('savedBooking:', savedBooking);
 
  if (savedBooking) {
-  const totalPrice = totalDays * 50;
+  const totalPrice = totalDays * config.valor_por_pernoite;
  	res.status(201).json({
 			success: true,
 			message: `A reserva foi concluída com sucesso para ${totalDays} dia(s). O preço total é € ${totalPrice}.`,
