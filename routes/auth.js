@@ -10,7 +10,7 @@ router.route('/login')
 .post(login); //qualquer um
 
 router.route('/me')
-.get(protect, authorize('user','admin'),protect, getMe);
+.get(protect, authorize('user','admin'), getMe);
 
 router.route('/logout')
 .get(protect, authorize('user','admin'), logout);

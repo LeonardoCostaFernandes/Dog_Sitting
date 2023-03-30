@@ -10,7 +10,7 @@ const {config} = require('../config/maximum_amount_of_bookings');
 // @access  Private
 exports.addBooking = asyncHandler(async (req, res, next) => {
  console.log("req.body",req.body);
- const { id_dog, booking_day, user } = req.body;
+ const { id_dog, booking_day } = req.body;
  console.log("booking_day", booking_day);
 
  // Verifica se o id_dog existe na coleção Dogs
@@ -18,12 +18,12 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
  if (!dog) {
   return res.status(404).json({ error: 'Não foi possível encontrar o cão solicitado' });
  }
-
+/*
  // Verifica se o user é igual ao user registrado na coleção Dogs com o id_dog pesquisado
  if (dog.user.toString() !== user) {
   return res.status(400).json({ error: 'O usuário que está fazendo a reserva não é o proprietário do cachorro' });
  }
-
+*/
  const currentDate = new Date();
  console.log("currentDate",currentDate)
 
@@ -75,7 +75,7 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
  const booking = new Booking({
   id_dog,
   booking_day,
-  user
+ 
  });
  const savedBooking = await booking.save();
  console.log('savedBooking:', savedBooking);
@@ -378,3 +378,30 @@ exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 	}
 });
 
+// @desc    Approve or reject a booking
+// @route   PUT /api/v1/bookings/approve/:id
+// @access  Private/Admin
+exports.bookingApprover = asyncHandler(async (req, res, next) => {
+	const booking = await Booking.findById(req.params.id);
+
+	if (!booking) {
+		console.log(`Booking not found with id of ${req.params.id}`);
+		return next(
+			new ErrorResponse(`Booking not found with id of ${req.params.id}`, 404));
+	}
+
+	if (booking.booking_status !== 'pending') {
+		console.log(`reserva não PENDING`);
+		return next(
+			new ErrorResponse('Esta reserva já foi aprovada/rejeitada', 400));
+	}
+
+	booking.booking_status = req.body.booking_status;
+
+	const updatedBooking = await booking.save();
+	console.log(`reserva aprovada com sucesso`);
+	res.status(200).json({
+		success: true,
+		data: updatedBooking
+	});
+});

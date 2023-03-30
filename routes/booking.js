@@ -6,7 +6,8 @@ const { addBooking,
 	getAllBookingsBetweenDates,
 	getAllBookings,
 	updateBooking,
-	allDatesOpenForBooking
+	allDatesOpenForBooking,
+	bookingApprover
 } = require('../controllers/booking');
 
 const router = express.Router({ mergeParams: true });
@@ -28,6 +29,9 @@ router.route('/byOneDate/:startDate')
 
 router.route('/byDates/:startDate/:endDate')
 	.get(protect, authorize('admin'), getAllBookingsBetweenDates); //somente admin
+
+router.route('/approve/:id')
+	.put(protect, authorize('admin'), bookingApprover); //somente admin
 
 router.route('/available/:startDate/:endDate')
 	.get(allDatesOpenForBooking); //qualquer um, mesmo sem cadastro

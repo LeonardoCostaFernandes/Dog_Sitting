@@ -7,18 +7,18 @@ const BookingSchema = new mongoose.Schema({
 	},
 	booking_status: {
 		type: String,
-		enum: ['pending', 'approved', 'rejected'],
+		enum: ['pending', 'approved'],
 		default: 'pending'
 	},
 	booking_day: {
 		type: [Date],
 		required: [true, 'Please add a booking day']
 	},
-	user: {
+	/*user: {
 		type: mongoose.Schema.ObjectId,
 		ref: 'User',
 		required: true
-	},
+	},*/
 	date_that_was_made_the_reservation: {
 		type: Date,
 		default: Date.now
