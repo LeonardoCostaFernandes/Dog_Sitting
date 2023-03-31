@@ -50,10 +50,19 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
 
  //adicionando um valor para as reservas realizadas
  let totalDays = 0;
+	let totalPrice =0;
  for (let i = 0; i < booking_day.length; i++) {
    const currentBookingDay = booking_day[i];
-   const bookingDate = new Date(currentBookingDay);
+   //const bookingDate = new Date(currentBookingDay);
+   if (config.dias_com_valor_diferente_do_padrao.includes(currentBookingDay)) {
    totalDays++;
+			totalPrice = (config.preco_diferenciado * totalDays)
+  } 
+  else {
+			totalDays++;
+			totalPrice = (config.valor_por_pernoite * totalDays)
+  }
+
  }
 
  // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada para cada data individualmente
@@ -89,7 +98,7 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
  console.log('savedBooking:', savedBooking);
 
  if (savedBooking) {
-  const totalPrice = totalDays * config.valor_por_pernoite;
+  //const totalPrice = totalDays * config.valor_por_pernoite;
  	res.status(201).json({
 			success: true,
 			message: `A reserva foi concluída com sucesso para ${totalDays} dia(s). O preço total é € ${totalPrice}.`,
