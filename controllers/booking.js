@@ -49,23 +49,37 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
  }
 
  //adicionando um valor para as reservas realizadas
- let totalDays = 0;
-	let totalPrice =0;
+ let totalDaysWithDifferentPrice  = 0;
+	let totalPriceWithDifferentPrice  =0;
+	let totalDaysWithDefaultPrice = 0;
+	let totalDays = 0;
+
  for (let i = 0; i < booking_day.length; i++) {
-   const currentBookingDay = booking_day[i];
-   //const bookingDate = new Date(currentBookingDay);
-   if (config.dias_com_valor_diferente_do_padrao.includes(currentBookingDay)) {
-   totalDays++;
-			totalPrice = (config.preco_diferenciado * totalDays)
+		const currentBookingDay = booking_day[i];
+		//const bookingDate = new Date(currentBookingDay);
+		if (config.dias_com_valor_diferente_do_padrao.includes(currentBookingDay)) {
+			totalDaysWithDifferentPrice++;
+			totalPriceWithDifferentPrice = config.preco_diferenciado;
   } 
   else {
-			totalDays++;
-			totalPrice = (config.valor_por_pernoite * totalDays)
-  }
+			totalDaysWithDefaultPrice++;
+		}
+	}
 
- }
+	const totalPrice =
+		totalPriceWithDifferentPrice * totalDaysWithDifferentPrice +
+		config.valor_por_pernoite * totalDaysWithDefaultPrice
+	;
 
- // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada para cada data individualmente
+	totalDays = totalDaysWithDifferentPrice + totalDaysWithDefaultPrice;
+
+	console.log("totalDaysWithDifferentPrice", totalDaysWithDifferentPrice);
+	console.log("totalPriceWithDifferentPrice", totalPriceWithDifferentPrice);
+	console.log("totalDaysWithDefaultPrice", totalDaysWithDefaultPrice);
+	console.log("totalDays", totalDays);
+	console.log("totalPrice", totalPrice);
+
+	 // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada para cada data individualmente
  for (const day of booking_day) {
   const existingBookingsCount = await Booking.countDocuments({
   booking_day: { $eq: day }
