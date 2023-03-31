@@ -11,7 +11,7 @@ const authRouter = require('./routes/auth');
 const dogsRouter = require('./routes/dog');
 const bookingsRouter = require('./routes/booking');
 const BookingConfig =require('./routes/bookingConfig');
-//const {BookingConfig} = require('./models/BookingConfig');
+const updateBookingConfig =require('./routes/bookingConfig');
 
 
 // Load env vars (dotenv é usado para carregar as variáveis ​​de ambiente a partir do arquivo config.env)
@@ -47,6 +47,8 @@ app.use('/api/v1/dogs', dogsRouter);
 app.use('/api/v1/bookings', bookingsRouter);
 
 app.use('/api/v1/bookingConfig', BookingConfig);
+
+app.use('/api/v1/bookingConfig/:id', updateBookingConfig);
 
 app.use(errorHandler);
 
