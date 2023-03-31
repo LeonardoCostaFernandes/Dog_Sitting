@@ -10,6 +10,9 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/auth');
 const dogsRouter = require('./routes/dog');
 const bookingsRouter = require('./routes/booking');
+const BookingConfig =require('./routes/bookingConfig');
+//const {BookingConfig} = require('./models/BookingConfig');
+
 
 // Load env vars (dotenv é usado para carregar as variáveis ​​de ambiente a partir do arquivo config.env)
 dotenv.config({ path: './config/config.env' });
@@ -42,6 +45,8 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/dogs', dogsRouter);
 
 app.use('/api/v1/bookings', bookingsRouter);
+
+app.use('/api/v1/bookingConfig', BookingConfig);
 
 app.use(errorHandler);
 
