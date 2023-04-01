@@ -2,7 +2,8 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Booking = require('../models/Booking');
 const Dog = require('../models/Dog');
-const {config} = require('../config/maximum_amount_of_bookings');
+//const {config} = require('../config/maximum_amount_of_bookings');
+const BookingConfig = require('../models/BookingConfig');
 
 
 // @desc    Add a booking
@@ -36,6 +37,8 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
   }
  }
 
+	const bookingConfig = await BookingConfig.findOne();
+
  // Validando o parâmetro booking_day para garantir que todas as datas sejam válidas e sejam posteriores à data de hoje
  for (let i = 0; i < req.body.booking_day.length; i++) {
   const bookingDate = new Date(req.body.booking_day[i]);
@@ -57,18 +60,20 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
  for (let i = 0; i < booking_day.length; i++) {
 		const currentBookingDay = booking_day[i];
 		//const bookingDate = new Date(currentBookingDay);
-		if (config.dias_com_valor_diferente_do_padrao.includes(currentBookingDay)) {
+		if (bookingConfig.dias_com_valor_diferente_do_padrao.includes(currentBookingDay)) {
 			totalDaysWithDifferentPrice++;
-			totalPriceWithDifferentPrice = config.preco_diferenciado;
+			totalPriceWithDifferentPrice = bookingConfig.preco_diferenciado;
   } 
   else {
 			totalDaysWithDefaultPrice++;
 		}
 	}
 
+console.log("bookingConfig.preco_diferenciado",bookingConfig.preco_diferenciado);
+
 	const totalPrice =
 		totalPriceWithDifferentPrice * totalDaysWithDifferentPrice +
-		config.valor_por_pernoite * totalDaysWithDefaultPrice
+		bookingConfig.valor_por_pernoite * totalDaysWithDefaultPrice
 	;
 
 	totalDays = totalDaysWithDifferentPrice + totalDaysWithDefaultPrice;
@@ -89,16 +94,16 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
    
   //avaliando o tipo 
   console.log(typeof existingBookingsCount );
-  console.log(typeof config.maximum_amount_of_bookings );
+  console.log(typeof bookingConfig.maximum_amount_of_bookings );
 
   // Verifica se a soma das reservas existentes e a reserva que está sendo adicionada é maior ou igual ao número máximo de cães permitidos
-  if (existingBookingsCount + 1 > config.maximum_amount_of_bookings) {
+  if (existingBookingsCount + 1 > bookingConfig.maximum_amount_of_bookings) {
    console.log(`Não é possível realizar o booking para o dia ${day} por indisponibilidade de espaço`);
    return res.status(400).json({ error: `Não é possível realizar o booking para o dia ${day} por indisponibilidade de espaço` });
   }
-  console.log("maximum_amount_of_bookings", config.maximum_amount_of_bookings);
+  console.log("maximum_amount_of_bookings", bookingConfig.maximum_amount_of_bookings);
    
-  if (existingBookingsCount + 1 > config.maximum_amount_of_bookings) {
+  if (existingBookingsCount + 1 > bookingConfig.maximum_amount_of_bookings) {
    break;
   }
   }
