@@ -10,7 +10,7 @@ const BookingConfig = require('../models/BookingConfig');
 // @access  Private
 exports.addBooking = asyncHandler(async (req, res, next) => {
  console.log("req.body",req.body);
- const { id_dog, booking_day } = req.body;
+ const { id_dog, booking_day, user } = req.body;
  console.log("booking_day", booking_day);
 
  // Verifica se o id_dog existe na coleção Dogs
@@ -113,7 +113,7 @@ console.log("bookingConfig.preco_diferenciado",bookingConfig.preco_diferenciado)
  const booking = new Booking({
   id_dog,
   booking_day,
- 
+ user
  });
  const savedBooking = await booking.save();
  console.log('savedBooking:', savedBooking);
@@ -242,7 +242,8 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
    new ErrorResponse(`Booking not found with id of ${req.params.id}`, 404)
   ); 
  }
- if (booking.user.toString() !== req.user.id) {
+ //if (user.id.toString() !== req.user.id && req.user.role !== 'admin') {
+		if (booking.user.toString() !== req.user.id) {
   return next(
    new ErrorResponse(`Not authorized to delete this booking`, 401)
   );
@@ -297,7 +298,7 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
  console.log(newBookingDate, "requested date for booking");
 
  // Verifies if the sum of existing bookings and the booking being updated is greater than the maximum allowed
- if (existingBookingsCount >= config.maximum_amount_of_bookings) {
+ if (existingBookingsCount >= BookingConfig.maximum_amount_of_bookings) {
   return res.status(400).json({ error: 'Cannot book due to lack of space' });
  }
 
@@ -374,7 +375,7 @@ exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 		console.log('bookingDays:', bookingDays);
 
 		// Calcula o número de vagas disponíveis em cada dia
-		const totalSlots = config.maximum_amount_of_bookings; // número total de vagas disponíveis por dia
+		const totalSlots = BookingConfig.maximum_amount_of_bookings; // número total de vagas disponíveis por dia
 		const availableSlots = {};
 		for (const date of Object.keys(counts)) {
 			availableSlots[date] = totalSlots - counts[date];

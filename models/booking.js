@@ -14,11 +14,11 @@ const BookingSchema = new mongoose.Schema({
 		type: [Date],
 		required: [true, 'Please add a booking day']
 	},
-	/*user: {
+	user: {
 		type: mongoose.Schema.ObjectId,
 		ref: 'User',
 		required: true
-	},*/
+	},
 	date_that_was_made_the_reservation: {
 		type: Date,
 		default: Date.now
