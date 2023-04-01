@@ -2,7 +2,6 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Booking = require('../models/Booking');
 const Dog = require('../models/Dog');
-//const {config} = require('../config/maximum_amount_of_bookings');
 const BookingConfig = require('../models/BookingConfig');
 
 
@@ -17,6 +16,7 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
  // Verifica se o id_dog existe na coleção Dogs
  const dog = await Dog.findById(id_dog);
  if (!dog) {
+		console.log("Dog not found");
   return res.status(404).json({ error: 'Não foi possível encontrar o cão solicitado' });
  }
 /*
@@ -59,6 +59,8 @@ exports.addBooking = asyncHandler(async (req, res, next) => {
 
  for (let i = 0; i < booking_day.length; i++) {
 		const currentBookingDay = booking_day[i];
+	//	console.log("booking_day:", new Date(Date.parse(booking_day)));
+		console.log("special day:", bookingConfig.dias_com_valor_diferente_do_padrao);
 		//const bookingDate = new Date(currentBookingDay);
 		if (bookingConfig.dias_com_valor_diferente_do_padrao.includes(currentBookingDay)) {
 			totalDaysWithDifferentPrice++;
@@ -124,6 +126,7 @@ console.log("bookingConfig.preco_diferenciado",bookingConfig.preco_diferenciado)
 			data: savedBooking,
  });
 	} else {
+		console.log("Error saving booking");
 		return res.status(500).json({ error: 'Houve um erro ao salvar a reserva.' });
 	};
 });

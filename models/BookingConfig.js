@@ -10,7 +10,7 @@ const BookingConfigSchema = new mongoose.Schema({
    type: Number
   },
   dias_com_valor_diferente_do_padrao: {
-   type: [Date]
+   type: [String]
   },
  });
 module.exports = mongoose.model('BookingConfig', BookingConfigSchema);
