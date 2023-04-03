@@ -22,11 +22,7 @@ exports.register = asyncHandler(async (req, res, next) => {
   password
  });
 
- // Create token
- //const token = user.getSignedJwtToken();
-
- //res.status(200).json({ success: true, token });
- sendTokenResponse(user, 200, res);
+  sendTokenResponse(user, 200, res);
 });
 
 // @desc      Login user
@@ -54,10 +50,6 @@ exports.login = asyncHandler(async (req, res, next) => {
   return next(new ErrorResponse('Invalid credentials', 401));
  }
 
- // Create token
- //const token = user.getSignedJwtToken();
-
- //res.status(200).json({ success: true, token });
  console.log(user);
  console.log('user');
  sendTokenResponse(user, 200, res);
@@ -119,7 +111,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Upload photo for user
-// @route     PUT /api/v1/auth/:id/photo
+// @route     PUT /api/v1/:id/photo
 // @access    Private
 exports.authPhotoUpload = asyncHandler(async (req, res, next) => {
  console.log(req.params.id);

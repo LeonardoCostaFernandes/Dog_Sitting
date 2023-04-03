@@ -145,7 +145,7 @@ exports.getBookings = asyncHandler(async (req, res, next) => {
 
 // @desc      Get all bookings
 // @route     GET /api/v1/bookings/all
-// @access    Public
+// @access    Admin
 exports.getAllBookings = asyncHandler(async (req, res, next) => { 
  const bookings = await Booking.find();
  res.status(200).json({
@@ -156,7 +156,7 @@ exports.getAllBookings = asyncHandler(async (req, res, next) => {
 
 // @desc    Get all bookings for a specific date with day counter
 // @route   GET /api/v1/bookings/byOneDate/:startDate
-// @access  Public
+// @access  Admin
 exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
  /**
   * @param {string} req.params.date - The date in format 'YYYY-MM-DD'
@@ -177,7 +177,7 @@ exports.getAllBookingsByDate = asyncHandler(async (req, res, next) => {
 
 // @desc    Get all bookings between two dates com contador
 // @route   GET /api/v1/bookings/:startDate/:endDate
-// @access  Public
+// @access  Admin
 exports.getAllBookingsBetweenDates = asyncHandler(async (req, res, next) => {
  try {
   const startDate = new Date(req.params.startDate);
@@ -315,7 +315,6 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
 
 // @desc    Get all available booking dates
 // @route   GET /api/v1/bookings/available/:startDate/:endDate
-//http://localhost:4000/api/v1/bookings/available/start_date=24-04-01&end_date=24-04-03
 // @access  Public
 exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 	try {
@@ -405,7 +404,7 @@ exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
   console.log('req.params.startDate:', req.params.startDate);
   console.log('req.params.endDate:', req.params.endDate);
   console.log('bookingDays:', bookingDays);
-		
+		//console.log('availableSlots[date]:', availableSlots[date]);
 		// Ordena o resultado por datas crescentes
 		result.sort((a, b) => a.booking_day - b.booking_day)
 		
@@ -426,7 +425,7 @@ exports.allDatesOpenForBooking = asyncHandler(async (req, res, next) => {
 
 // @desc    Approve or reject a booking
 // @route   PUT /api/v1/bookings/approve/:id
-// @access  Private/Admin
+// @access  Admin
 exports.bookingApprover = asyncHandler(async (req, res, next) => {
 	const booking = await Booking.findById(req.params.id);
 

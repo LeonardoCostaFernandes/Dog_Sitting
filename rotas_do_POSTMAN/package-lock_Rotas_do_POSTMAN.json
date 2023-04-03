@@ -1,0 +1,908 @@
+{
+	"info": {
+		"_postman_id": "15d3639e-90a9-40c3-85d5-316f14cb3c85",
+		"name": "PasseioAmigoLisboa",
+		"description": "# Esta API possibilita o agendamento de pernoites para cães, oferecendo um cadastro interativo para usuários, onde podem incluir seus dados pessoais e fotos, assim como cadastrar seus cães para posterior reserva de pernoites. Ao fazer uma reserva, o sistema avalia o limite diário de cães e possibilita a alteração desse limite pelo administrador. Além disso, é possível definir valores diferenciados para datas especiais, assim como alterar os valores padrão de reserva e as datas consideradas especiais através do login do administrador.\n\n### COMO INICIAR AS FUNCIONALIDADES\n\n#### Comece usando a função addBookingConfig na rota pelo metodo POST na rota api/v1/bookingConfig para que seja cadastrado os dados que serão consumidos durante as reservas. Entenda mais lendo Introdução à Pasta \"BookingConfig\" da Coleção \"Passeio Amigo\" no final da documentação\n\n  \n\nEndFragment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19134738"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Eloi\",\r\n  \"email\": \"eloi@example.com\",\r\n  \"role\": \"user\",\r\n  \"address\": \"Avenida da liberdade, nº 30\",\r\n  \"nif\": 999999999,\r\n   \"phone\": \"\",\r\n  \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável por registrar um novo usuário na aplicação. Para isso, é necessário as informações do usuário a ser cadastrado no corpo da requisição.\n\nOs parâmetros necessários são:\n\n- \"name\": nome do usuário (string)\n- \"role\": papel do usuário na aplicação (string)\n- \"email\": endereço de email do usuário (string)\n- \"nif\": número de identificação fiscal do usuário (string)\n- \"password\": senha do usuário (string)\n- \"address\": endereço do usuário (string)\n- \"phone\": número de telefone do usuário (string)\n    \n\nAo receber a requisição, a função \"register\" cria um novo usuário com as informações fornecidas.\n\nObservação: O acesso a essa rota é público, ou seja, qualquer usuário pode se registrar."
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Eloi\",\r\n  \"email\": \"eloi@example.com\",\r\n  \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pela autenticação de um usuário. Para isso, é necessário as informações do usuário a ser cadastrado no corpo da requisição.\n\nOs parâmetros necessários são:\n\n- \"name\": nome do usuário (string)\n- \"email\": endereço de email do usuário (string)\n- \"password\": senha do usuário (string)\n    \n\nAo receber a requisição, a função \"login\" fará a validação de email e senha, e procurará um usuário com o email fornecido na base de dados bem como a senha e se for válido registrará o usuário criando um token.\n\nObservação: O acesso a essa rota é público, ou seja, qualquer usuário pode se registrar."
+					},
+					"response": []
+				},
+				{
+					"name": "Login User ADMIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\t{\r\n\t\t\"email\": \"bruno@example.com\",\r\n\t\t\"password\": \"123456\"\r\n\t}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Essa requisição é responsável pela autenticação de um um admin, criada para o ambiente de teste. Para isso, é necessário as informações do usuário a ser cadastrado no corpo da requisição.\n\nOs parâmetros necessários são:\n\n- \"name\": nome do usuário (string)\n- \"email\": endereço de email do usuário (string)\n- \"password\": senha do usuário (string)\n    \n\nAo receber a requisição, a função \"login\" fará a validação de email e senha, e procurará um usuário com o email fornecido na base de dados bem como a senha e se for válido registrará o usuário criando um token."
+					},
+					"response": []
+				},
+				{
+					"name": "getMe",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/api/v1/auth/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"me"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável por retornar os dados de um usuário. Para isso, é necessário apenas ter realizado o login.\n\nNão há parâmetros necessários:\n\nAo receber a requisição, a função \"getMe\" retornará os dados cadastrados do usuário.\n\n  \n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n  \"email\": \"leo@example.com\"\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pelo logout de um usuário. \n\nNão parâmetros necessários:\n\n  \n\nAo receber a requisição, a função \"logout\" destruirá o token necessário para acessar as rotas cabíveis a usuários que tenham realizado o login.\n\n  \n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "authPhotoUpload",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/leona/Pictures/Papada_de_Porco.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/auth/6428bee2c2cca04cd6fcf407/photo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"6428bee2c2cca04cd6fcf407",
+								"photo"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pelo envio de uma foto de perfil para um usuário autenticado. Para essa requisição é necessário ter o id do usuário.\n\nNão há parâmetros necessários.\n\n  \n\nAo receber a requisição, a função \"authPotoUpload\" espera receber um arquivo de imagem, que será salvo no servidor. Antes de salvar o arquivo, o código verifica se o usuário com o ID fornecido existe no banco de dados."
+					},
+					"response": []
+				},
+				{
+					"name": "updateUser",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Leo\",\r\n  \"email\": \"leo@example.com\",\r\n  \"role\": \"user\",\r\n  \"address\": \"Avenida da liberdade, nº 30\",\r\n  \"nif\": 888888888,\r\n   \"phone\": \"\"\r\n \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/auth/64286f2cadb7d0b85c6a474d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"64286f2cadb7d0b85c6a474d"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pela autenticação de um usuário. Para isso, é necessário as informações do usuário a ser cadastrado no corpo da requisição.\n\nOs parâmetros necessários são:\n\n- \"name\": nome do usuário (string)\n- \"role\": papel do usuário na aplicação (string)\n- \"email\": endereço de email do usuário (string)\n- \"nif\": número de identificação fiscal do usuário (string)\n- \"address\": endereço do usuário (string)\n- \"phone\": número de telefone do usuário (string)\n    \n\nAo receber a requisição, a função \"uptadeUser\" fará a edição dos dados enviados e guardará no banco de dados.\n\n  \n\nEndFragment"
+					},
+					"response": []
+				}
+			],
+			"description": "StartFragment\n\n# Introdução à Pasta \"Auth\" da Coleção \"Passeio Amigo\"\n\nEsta pasta do Postman oferece endpoints para criar uma nova conta, fazer login, atualizar informações do usuário e fazer upload de fotos As requisições estão agrupadas por endpoint e cada endpoint tem várias solicitações, incluindo solicitações de sucesso e falha.\n\nCada solicitação tem seu próprio conjunto de dados e informações, incluindo o corpo da solicitação e os cabeçalhos necessários para cada endpoint. As respostas incluem informações de status, dados de resposta e cabeçalhos relevantes.\n\nAs solicitações são escritas usando o método HTTP correto para cada endpoint (POST, PUT, GET). Além disso, o endpoint \"auth/register\" é público, enquanto os outros endpoints requerem autenticação e o token de autenticação é enviado com as solicitações que precisam de autenticação\n\n## Visão Geral\n\nA documentação desta API fornece uma visão geral das solicitações suportadas pelo código POSTMAN. As solicitações incluem register, login, getMe, logout, authPhotoUpload e updateUser.\n\n## Solicitações\n\nAs seguintes solicitações estão disponíveis nesta API:\n\n### register\n\nEsta solicitação permite que os usuários criem uma nova conta. Para registrar um usuário, envie uma solicitação POST para /api/v1/auth/register. Os seguintes parâmetros são obrigatórios:\n\n- name: Nome do usuário\n- role: Função do usuário ( user ou admin)\n- email: Endereço de e-mail do usuário\n- nif: Número de Identificação Fiscal do usuário\n- password: Senha do usuário\n- address: Endereço do usuário\n- phone: Número de telefone do usuário\n    \n\n### login\n\nEsta solicitação permite que os usuários façam login em sua conta. Para fazer login, envie uma solicitação POST para /api/v1/auth/login. Os seguintes parâmetros são obrigatórios:\n\n- email: Endereço de e-mail do usuário\n- password: Senha do usuário\n    \n\n### loginUserAdmin\n\nEsta solicitação, criada apenas para o processo de testes, permite o login do admin em sua conta. Para fazer login, envie uma solicitação POST para /api/v1/auth/login. Os seguintes parâmetros são obrigatórios:\n\n- email: Endereço de e-mail do usuário\n- password: Senha do usuário\n    \n\n### getMe\n\nEsta solicitação permite que os usuários obtenham informações de sua conta. Para obter as informações da conta, envie uma solicitação GET para /api/v1/auth/me. Necessário login.\n\n### logout\n\nEsta solicitação permite que os usuários saiam de sua conta. Para fazer logout, envie uma solicitação GET para /api/v1/auth/logout. Necessário login.\n\n### authPhotoUpload\n\nEsta solicitação permite que os usuários façam upload de uma foto. Para fazer upload de uma foto, envie uma solicitação PUT para /api/v1/auth/:id/photo. Necessário login. O seguinte parâmetro é obrigatório:\n\n- file: A foto a ser enviada\n    \n\n### updateUser\n\nEsta solicitação permite que os usuários atualizem as informações de sua conta. Para atualizar as informações da conta, envie uma solicitação PUT para /api/v1/auth/:id. Os seguintes parâmetros são obrigatórios:\n\n- name: Nome do usuário\n- email: Endereço de e-mail do usuário\n- nif: Número de Identificação Fiscal do usuário\n- password: Senha do usuário\n- address: Endereço do usuário\n- phone: Número de telefone do usuário\n    \n\nCom esta documentação, os desenvolvedores podem começar a usar a API do Passeio Amigo de forma rápida e fácil para prosseguir com a segunda etapa do projeto, que é adicionar e gerir as informações sobre os cães."
+		},
+		{
+			"name": "Dog",
+			"item": [
+				{
+					"name": "addDog",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MWY1YzEyY2EwNDI3YTZlNjExYzQ0YSIsImlhdCI6MTY3OTc3NjgxMSwiZXhwIjoxNjgyMzY4ODExfQ.pcCReFaBonKh2XI3nZAnwYxVCbEKe_LhkLT84y9H008",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"name\": \"poly\",\r\n \"breed\": \"Shih Tzu\",\r\n \"ano_de_nascimento\": \"2040\",\r\n \"user\": \"64286f2cadb7d0b85c6a474d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/dogs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"dogs"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pelo registro de um cão. Para isso, é necessário as informações do cão a ser cadastrado no corpo da requisição.\n\nOs parâmetros necessários são:\n\n- name: Nome do cachorro\n- breed: Raça do cachorro\n- ano_de_nascimento: ano de nascimento do cachorro.\n- user: id do usuário que está cadastrando o cachorro.\n    \n\nAo receber a requisição, a função \"addDog\" será realizado o registro no banco de dados.\n\n  \n\n### Resposta de sucesso\n\n- **Código:** 201 CREATED\n- jsonCopy code`{ \"success\": true, \"data\": { \"_id\": \"5fd996e46555601f5cf8cccb\", \"name\": \"Rex\", \"breed\": \"Labrador\", \"age\": 3, \"color\": \"Preto\", \"user\": \"5fd996e46555601f5cf8cccc\", \"__v\": 0 } }`\n    \n\n### Resposta de erro\n\n- jsonCopy code`{ \"success\": false, \"error\": \"Not authorized to access this route\" }`\n- jsonCopy code`{ \"success\": false, \"error\": \"Please provide a name for the dog\" }`\n    \n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "getDogs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/api/v1/dogs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"dogs"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição, permitida apenas para admin é responsável por retornar todos os registro de cães cadastrados.\n\nNão há parâmetros necessários.\n\nAo receber a requisição, a função \"addDog\" retornará todos os cães\n\nResposta de sucesso  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{  \n\"success\": true,  \n\"data\": \\[  \n{  \n\"_id\": \"5fd996e46555601f5cf8cccb\",  \n\"name\": \"Rex\",  \n\"breed\": \"Labrador\",  \n\"age\": 3,  \n\"color\": \"Preto\",  \n\"user\": \"5fd996e46555601f5cf8cccc\",  \n\"**v\": 0  \n},  \n{  \n\"_id\": \"5fd996e46555601f5cf8cccd\",  \n\"name\": \"Buddy\",  \n\"breed\": \"Golden Retriever\",  \n\"age\": 2,  \n\"color\": \"Dourado\",  \n\"user\": \"5fd996e46555601f5cf8cccc\",  \n\"**v\": 0  \n}  \n\\]  \n}\n\nResposta de erro  \nCódigo: 401 UNAUTHORIZED  \njson  \nCopy code  \n{  \n\"success\": false,  \n\"error\": \"Not authorized to access this route\"  \n}  \nCódigo: 500 INTERNAL SERVER ERROR  \njson  \nCopy code  \n{  \n\"success\": false,  \n\"error\": \"Server error\"  \n}"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteDog",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MWY1YzEyY2EwNDI3YTZlNjExYzQ0YSIsImlhdCI6MTY3OTc3NjgxMSwiZXhwIjoxNjgyMzY4ODExfQ.pcCReFaBonKh2XI3nZAnwYxVCbEKe_LhkLT84y9H008",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/dogs/642850d671ba2f1fc6fc0232",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"dogs",
+								"642850d671ba2f1fc6fc0232"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pela exclusão de registro de um cão. Para isso, é necessário as informações do id do cão a ser excluído na rota.\n\nNão há parâmetros necessários:\n\nAo receber a requisição, a função \"deleteDog\" excluirá do banco de dados o registro do cão escolhido.\n\ndFragment\n\nResposta de sucesso  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{  \n\"success\": true,  \n\"data\": {}  \n}\n\nResposta de erro  \nCódigo: 401 UNAUTHORIZED  \njson  \nCopy code  \n{  \n\"success\": false,  \n\"error\": \"Not authorized to access this route\"  \n}  \nCódigo: 404 NOT FOUND  \njson  \nCopy code  \n{  \n\"success\": false,  \n\"error\": \"Dog not found with id of :id\"  \n}  \nCódigo: 500 INTERNAL SERVER ERROR  \njson  \nCopy code  \n{  \n\"success\": false,  \n\"error\": \"Server Error\"  \n}\n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "dogPhotoUpload",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/leona/Pictures/cao_papada_de_porco.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/dogs/642871caba9fa6424ce51e00/photo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"dogs",
+								"642871caba9fa6424ce51e00",
+								"photo"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pelo envio de uma foto de perfil para o cão de um usuário autenticado. Para essa requisição é necessário ter o id do cão.\n\nParâmetros necessários.\n\n- file (obrigatório): Arquivo da nova foto do cachorro (imagem).\n    \n\nAo receber a requisição, a função \"dogPotoUpload\" espera receber um arquivo de imagem, que será salvo no servidor. Antes de salvar o arquivo, o código verifica se o cão com o ID fornecido existe no banco de dados.\n\nEndFragment\n\n  \nResposta de sucesso  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{ \"success\": true, \"data\": \"photo_\" }  \nResposta de erro  \nCódigo: 400 BAD REQUEST  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Please upload a file\" }  \nCódigo: 400 BAD REQUEST  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Please upload an image file\" }  \nCódigo: 400 BAD REQUEST  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Please upload an image less than \" }  \nCódigo: 404 NOT FOUND  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Dog not found with id of \" }  \nCódigo: 500 INTERNAL SERVER ERROR  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Problem with file upload\" }\n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "updateDog",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"name\": \"belinha\",\r\n \"breed\": \"outro\",\r\n \"ano_de_nascimento\": \"3000\",\r\n \"user\": \"64286f2cadb7d0b85c6a474d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/dogs/642871caba9fa6424ce51e00",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"dogs",
+								"642871caba9fa6424ce51e00"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pela alteração dos dados de cão. Para isso, é necessário o id do cão na rota.\n\nOs parâmetros necessários são:\n\n- name: Nome do cachorro\n- breed: Raça do cachorro\n- ano_de_nascimento: ano de nascimento do cachorro.\n- user: id do usuário que está cadastrando o cachorro.\n    \n\nAo receber a requisição, a função \"updateDog\" atualizará os dados do registro do cão selecionado.\n\n  \nResposta de sucesso  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{ \"success\": true, \"data\": { \"_id\": \"5fd996e46555601f5cf8cccb\", \"name\": \"Rex\", \"breed\": \"Labrador\", ano_de_nascimento\": 2014, \"user\": \"5fd996e46555601f5cf8cccc\", \"__v\": 0 } }  \nResposta de erro  \nCódigo: 401 UNAUTHORIZED  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Not authorized to access this route\" }  \nCódigo: 404 NOT FOUND  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Dog not found with id of :id\" }  \nCódigo: 400 BAD REQUEST  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Please provide at least one field to update\" }\n\nEndFragment"
+					},
+					"response": []
+				}
+			],
+			"description": "StartFragment\n\n# Introdução à Pasta \"Dog\" da Coleção \"Passeio Amigo\"\n\nEsta pasta do Postman oferece endpoints para criar registros de cães e gerenciar cães cadastrados na plataforma Passeio Amigo. As solicitações estão agrupadas por endpoint e cada endpoint possui diferentes solicitações, incluindo adicionar um novo cão, listar todos os cães, excluir um cão, atualizar informações de um cão e fazer upload de uma foto para um cão específico, incluindo solicitações de sucesso e falha.\n\nCada solicitação tem seu próprio conjunto de dados e informações, incluindo o corpo da solicitação e os cabeçalhos necessários para cada endpoint. As respostas incluem informações de status, dados de resposta e cabeçalhos relevantes.\n\nCada solicitação contém informações detalhadas, como o método HTTP correto (POST, GET, PUT, DELETE), o caminho da URL e os cabeçalhos necessários para acessar o endpoint. As respostas incluem informações de status, dados de resposta e cabeçalhos relevantes.\n\n## Visão Geral\n\nA documentação desta API fornece uma visão geral das solicitações suportadas pelo código POSTMAN. As solicitações incluem addDog, getDogs, deleteDog e dogPhotoUpload.  \n  \n\nOs endpoints \"POST /api/v1/dogs\" e \"DELETE /api/v1/dogs/:id\" são acessíveis apenas por usuários autenticados, enquanto o endpoint \"GET /api/v1/dogs\" é acessível apenas por usuários com a função \"admin\". Já o endpoint \"PUT /api/v1/dogs/:id/photo\" e \"PUT /api/v1/dogs/:id\" requerem autenticação e o token de autenticação deve ser enviado com as solicitações.\n\n##   \n\n## Solicitações\n\nAs seguintes solicitações estão disponíveis nesta API:\n\n### addDog\n\nEsta solicitação permite que os usuários criem o registro de um cão. Para adicionar um novo cão, use a solicitação \"POST /api/v1/dogs\". Os seguintes parâmetros são obrigatórios:\n\n- name: Nome do cão\n- breed: raça do cão\n- ano_de_nascimento: ano do nascimento do cão\n- user: id do usuário\n    \n\n  \n\n### getDogs\n\nEsta solicitação, exclusiva do admin, permite que administrador obtenha o registro de todos os cães cadastrados na plataforma. Para listar todos os cães cadastrados, use a solicitação \"GET /api/v1/dogs\". Não há parâmetros obrigatórios:\n\n  \n\n### deleteDog\n\nEsta solicitação permite que os usuários façam a exclusão de um cão cadastrado. Para excluir um cão, use a solicitação \"DELETE /api/v1/dogs/:id\", passando o ID do cão a ser excluído como um parâmetro na URL.\n\n### dogPhotoUpload\n\nEsta solicitação permite que os usuários registrem uma foto de seu cão cadastrado. Para fazer upload de uma foto para um cão específico, use a solicitação \"PUT /api/v1/dogs/:id/photo\", passando o ID do cão na URL e enviando a imagem no corpo da solicitação. O seguinte parâmetro é obrigatório:\n\n- file: A foto a ser enviada\n    \n\n### updateDogUser\n\nEsta solicitação permite que os usuários atualizem as informações do registro do cão. Para atualizar as informações de um cão, use a solicitação \"PUT /api/v1/dogs/:id\", passando o ID do cão na URL e as informações atualizadas no corpo da solicitação. Tenha em mente que somente o usuário que criou o registro do cão pode atualizar ou excluir o registro. Os seguintes parâmetros são obrigatórios:\n\n- name: Nome do cão\n- breed: raça do cão\n- ano_de_nascimento: ano do nascimento do cão\n- user: id do usuário\n    \n\n  \n\nCom esta documentação, os desenvolvedores podem registrar seus cães na API do Passeio Amigo de forma rápida e fácil para prosseguir com a terceira etapa do projeto, que é realizar uma reserva de alojamento para cães, fazer edições e obter informações sobre as reservas."
+		},
+		{
+			"name": "Booking",
+			"item": [
+				{
+					"name": "addBooking",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"/*const moment = require('moment');\r",
+									"const dataAtual = moment().format('YYYY-MM-DD');\r",
+									"const dataReserva = moment('2023-06-06').format('YYYY-MM-DD');\r",
+									"\r",
+									"console.log(\"dataReserva no pre script\", dataReserva);\r",
+									"console.log(\"dataReserva no pre script\", dataAtual);\r",
+									"*/\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"id_dog\":\"642871caba9fa6424ce51e00\",\r\n\"booking_day\":[\"2024-12-25\"],\r\n\"booking_status\":\"pending\",\r\n\"user\":\"64286f2cadb7d0b85c6a474d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookings"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pelo registro de uma reserva. Para isso, é necessário as informações do usuário a ser cadastrado no corpo da requisição.\n\nOs parâmetros necessários são:\n\n- id_dog: o ID do cachorro para o qual a reserva está sendo feita\n- booking_day: uma matriz de datas em que a reserva será feita (YYYY-MM-DD)\n- user: o ID do usuário que está fazendo a reserva\n    \n\nAo receber a requisição, a função \"addBooking\" criará no banco de dados um registro de alojamento para as datas escolhidas, caso tenha disponibilidade de espaço.\n\n  \n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "getBookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should be an array\", function () {\r",
+									"    pm.expect(pm.response.json().data).to.be.an('array');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MTFjZTRiNTQzYTk0YmI3ZDQwMjk4NCIsImlhdCI6MTY3ODg5NjAzNSwiZXhwIjoxNjgxNDg4MDM1fQ.WQvHJFWCZ8K23MjJFC8nQY0OLT-xRFMbLWvK7oE4UXY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookings/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								""
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável por retornar os registros de reservas para o usuário que tenha realizado o login.\n\nNão há parâmetros necessários.\n\nAo receber a requisição, a função \"getBookings\"  retornará todas as reservas que aquele usuário já realizou.\n\nResposta de sucesso:  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{ \"success\": true, \"data\": \\[ { \"_id\": \"5fd996e46555601f5cf8cccb\", \"user\": \"5fd996e46555601f5cf8cccc\", \"location\": \"New York\", \"startDate\": \"2023-05-01T00:00:00.000Z\", \"endDate\": \"2023-05-10T00:00:00.000Z\", \"guests\": 2, \"**v\": 0 }, { \"_id\": \"5fd996e46555601f5cf8cccd\", \"user\": \"5fd996e46555601f5cf8cccc\", \"location\": \"Miami\", \"startDate\": \"2023-06-01T00:00:00.000Z\", \"endDate\": \"2023-06-10T00:00:00.000Z\", \"guests\": 4, \"**v\": 0 } \\] }\n\nResposta de erro:  \nCódigo: 401 UNAUTHORIZED  \nConteúdo:  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Not authorized to access this route\" }\n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "getAllBookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MTFjZTRiNTQzYTk0YmI3ZDQwMjk4NCIsImlhdCI6MTY3ODg5NjAzNSwiZXhwIjoxNjgxNDg4MDM1fQ.WQvHJFWCZ8K23MjJFC8nQY0OLT-xRFMbLWvK7oE4UXY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookings/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								"all"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição, que pode ser realizada apenas admin, é responsável por retornar todos os registros de reservas.\n\nNão há parâmetros necessários.\n\nAo receber a requisição, a função \"getAllBookings\"  retornará todas as reservas já cadastradas no banco de dados.\n\nResposta de sucesso  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{  \n\"success\": true,  \n\"data\": \\[  \n{  \n\"_id\": \"5fd996e46555601f5cf8cccb\",  \n\"user\": \"5fd996e46555601f5cf8cccc\",  \n\"property\": \"5fd996e46555601f5cf8ccd1\",  \n\"checkInDate\": \"2023-04-02T00:00:00.000Z\",  \n\"checkOutDate\": \"2023-04-05T00:00:00.000Z\",  \n\"createdAt\": \"2023-04-01T15:30:00.000Z\",  \n\"updatedAt\": \"2023-04-01T15:30:00.000Z\",  \n\"**v\": 0  \n},  \n{  \n\"_id\": \"5fd996e46555601f5cf8cccd\",  \n\"user\": \"5fd996e46555601f5cf8cccc\",  \n\"property\": \"5fd996e46555601f5cf8ccd5\",  \n\"checkInDate\": \"2023-04-06T00:00:00.000Z\",  \n\"checkOutDate\": \"2023-04-10T00:00:00.000Z\",  \n\"createdAt\": \"2023-04-01T15:30:00.000Z\",  \n\"updatedAt\": \"2023-04-01T15:30:00.000Z\",  \n\"**v\": 0  \n}  \n\\]  \n}  \nResposta de erro  \nCódigo: 500 INTERNAL SERVER ERROR  \njson  \nCopy code  \n{  \n\"success\": false,  \n\"error\": \"Server Error\"  \n}\n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "getAllBookingsByDate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should be an array\", function () {\r",
+									"    pm.expect(pm.response.json().data).to.be.an('array');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MTFjZTRiNTQzYTk0YmI3ZDQwMjk4NCIsImlhdCI6MTY3ODg5NjAzNSwiZXhwIjoxNjgxNDg4MDM1fQ.WQvHJFWCZ8K23MjJFC8nQY0OLT-xRFMbLWvK7oE4UXY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookings/byOneDate/2024-04-10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								"byOneDate",
+								"2024-04-10"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição, que pode ser realizada apenas admin, é responsável por retornar todos os registros de reservas no dia escolhido. É necessário colocar a data (YYYY-MM-DD) escolhida na rota.\n\nNão há parâmetros necessários.\n\nAo receber a requisição, a função \"getAllBookingsByDate\"  retornará todas as reservas realizadas para aquele dia escolhido.\n\nResposta de sucesso  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{  \n\"success\": true,  \n\"data\": \\[  \n{  \n\"count\": 2,  \n\"bookings\": \\[  \n{  \n\"_id\": \"60b6d3e1c40eb7a3a4a3b8fb\",  \n\"booking_day\": \"2022-06-01T00:00:00.000Z\",  \n\"user\": \"60b6d3e1c40eb7a3a4a3b8fa\",  \n\"**v\": 0  \n},  \n{  \n\"_id\": \"60b6d3e1c40eb7a3a4a3b8fc\",  \n\"booking_day\": \"2022-06-01T00:00:00.000Z\",  \n\"user\": \"60b6d3e1c40eb7a3a4a3b8fa\",  \n\"**v\": 0  \n}  \n\\],  \n\"booking_day\": \"2022-06-01T00:00:00.000Z\"  \n}  \n\\]  \n}  \nResposta de erro  \nCódigo: 401 UNAUTHORIZED  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Not authorized to access this route\" }  \nCódigo: 400 BAD REQUEST  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Please provide a valid start date in the format YYYY-MM-DD\" }\n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "getAllBookingsBetweenDates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookings/byDates/2024-04-01/2024-04-20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								"byDates",
+								"2024-04-01",
+								"2024-04-20"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição, que pode ser realizada apenas admin, é responsável por retornar todos os registros de reservas entre os dias escolhidos. É necessário colocar as datas (YYYY-MM-DD) escolhidas na rota.\n\nNão há parâmetros necessários.\n\nAo receber a requisição, a função \"getAllBookingsBetweenDates\"  retornará todas as reservas entre as datas escolhidas.\n\n**Resposta de sucesso (código: 200):**\n\n- **Resposta de erro:**\n    - Código: 500 Internal Server Error  \n        `{ \"success\": false, \"error\": \"Ocorreu um erro ao buscar as reservas.\" }`\n\nObs.: Os parâmetros opcionais para adicionar um novo cachorro não se aplicam a esta request.\n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteBooking",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookings/64287262ba9fa6424ce51e15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								"64287262ba9fa6424ce51e15"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pela exclusão de registro de uma reserva. Para isso, é necessário as informações do id da reserva a ser excluído na rota.\n\nNão há parâmetros necessários:\n\nAo receber a requisição, a função \"deleteBooking\" excluirá do banco de dados o registro da reserva escolhida.\n\n## Resposta de sucesso\n\n- Código: 200 OK\n- Conteúdo: `{ \"success\": true, \"data\": {} }`\n    \n\n## Resposta de erro\n\n- Código: 401 UNAUTHORIZED\n- Conteúdo: `{ \"success\": false, \"error\": \"Not authorized to access this route\" }`\n- Código: 404 NOT FOUND\n- Conteúdo: `{ \"success\": false, \"error\": \"Booking not found with id of {id}\" }`\n- Código: 500 INTERNAL SERVER ERROR\n- Conteúdo: `{ \"success\": false, \"error\": \"Ocorreu um erro ao excluir a reserva.\" }`\n    \n\nObservação: A autenticação é necessária para acessar este endpoint. O usuário deve ser o criador da reserva ou ter privilégios de administrador para excluir uma reserva.\n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "updateBooking",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"id_dog\":\"642871caba9fa6424ce51e00\",\r\n\"booking_day\":[\"2024-04-15\"]\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookings/64287253ba9fa6424ce51e0f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								"64287253ba9fa6424ce51e0f"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pela alteração dos dados da reserva. Para isso, é necessário o id da reserva na rota.\n\nOs parâmetros necessários são:\n\n- id_dog: o ID do cachorro para o qual a reserva está sendo feita\n- booking_day: uma matriz de datas em que a reserva será feita (YYYY-MM-DD)\n- user: o ID do usuário que está fazendo a reserva\n    \n\nAo receber a requisição, a função \"updateBooking\" atualizará os dados do registro da reserva selecionada.\n\nResposta de sucesso  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{ \"success\": true, \"data\": { \"_id\": \"6147e1229f5c1038d84c0074\", \"id_dog\": \"6147db2b10ae4b25c4dd4bb1\", \"booking_day\": \\[\"2023-04-02T00:00:00.000Z\"\\], \"user\": \"6147da7b10ae4b25c4dd4bad\", \"__v\": 0 } }  \nResposta de erro  \nCódigo: 401 UNAUTHORIZED  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Not authorized to access this route\" }  \nCódigo: 404 NOT FOUND  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Booking not found with id of :id\" }  \nCódigo: 400 BAD REQUEST  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Invalid date\" }  \nCódigo: 400 BAD REQUEST  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Cannot book for the selected date, choose a date after today\" }  \nCódigo: 400 BAD REQUEST  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Cannot book due to lack of space\" }"
+					},
+					"response": []
+				},
+				{
+					"name": "allDatesOpenForBooking",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookings/available/2024-04-01/2024-04-20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								"available",
+								"2024-04-01",
+								"2024-04-20"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável por retornar um contador de reservas para cada data e a quantidade de vagas disponíveis. Para isso, é necessário startDate (obrigatório): Data de início no formato 'YYYY-MM-DD' e endDate (obrigatório): Data de término no formato 'YYYY-MM-DD' na rota.\n\nOs parâmetros necessários são:\n\n- id_dog: o ID do cachorro para o qual a reserva está sendo feita\n- booking_day: uma matriz de datas em que a reserva será feita (YYYY-MM-DD)\n- user: o ID do usuário que está fazendo a reserva\n    \n\nAo receber a requisição, a função \"allDatesOpenForBooking\" retornará uma a listagem de todas as datas entre startDate e endDate com uma contagem de quantas reservas existem para aquele dia bem como a quantidade de vagas disponíveis.\n\n  \n\nResposta de sucesso:  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{  \n\"success\": true,  \n\"data\": \\[  \n{  \n\"booking_day\": \"2023-04-01T00:00:00.000Z\",  \n\"count\": 0,  \n\"vagas disponíveis\": 20  \n},  \n{  \n\"booking_day\": \"2023-04-02T00:00:00.000Z\",  \n\"count\": 3,  \n\"vagas disponíveis\": 17  \n},  \n{  \n\"booking_day\": \"2023-04-03T00:00:00.000Z\",  \n\"count\": 0,  \n\"vagas disponíveis\": 20  \n}  \n\\]  \n}\n\nObs: O número de vagas disponíveis por dia é determinado por um valor máximo definido na configuração de reservas (BookingConfig.maximum_amount_of_bookings). Caso o número de reservas em um determinado dia atinja o valor máximo, o número de vagas disponíveis para aquele dia será 0."
+					},
+					"response": []
+				},
+				{
+					"name": "bookingApprover",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"booking_status\":\"approved\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookings/approve/64287253ba9fa6424ce51e0f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								"approve",
+								"64287253ba9fa6424ce51e0f"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pela aprovação dos dados da reserva. Para isso, é necessário o id da reserva na rota.\n\nOs parâmetros necessários são:\n\n- StartFragmentbooking_status: approved\n    \n\nEndFragment\n\n  \n  \n\n  \nResposta de sucesso  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{ \"success\": true, \"data\": { \"_id\": \"5fd996e46555601f5cf8cccb\", \"booking_status\": \"approved\", \"__v\": 0 } }  \nResposta de erro  \nCódigo: 404 NOT FOUND  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Booking not found with id of {booking_id}\" }  \nCódigo: 400 BAD REQUEST  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Esta reserva já foi aprovada/rejeitada\" }  \nCódigo: 401 UNAUTHORIZED  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Not authorized to access this route\" }"
+					},
+					"response": []
+				}
+			],
+			"description": "StartFragment\n\n# Introdução à Pasta \"Booking\" da Coleção \"Passeio Amigo\"\n\nEsta pasta do Postman oferece endpoints para criar um novo registro de alojamento, obter os registro de um usuário logado, todos os registros de reservas realizadas, todos os registros para uma data específica, todos os registros entre datas estipuladas, apagar um registro, fazer uma modificação no registro, obter todas as vagas disponíveis para o intervalo de datas escolhidas e ainda um aprovador para as reservas realizadas pelo admin. As requisições estão agrupadas por endpoint e cada endpoint tem várias solicitações, incluindo solicitações de sucesso e falha.\n\nCada solicitação tem seu próprio conjunto de dados e informações, incluindo o corpo da solicitação e os cabeçalhos necessários para cada endpoint. As respostas incluem informações de status, dados de resposta e cabeçalhos relevantes.\n\nAs solicitações são escritas usando o método HTTP correto para cada endpoint (POST, PUT, GET, DEL). Além disso, o endpoint \"allDatesOpenForBooking\" é público, enquanto os outros endpoints requerem autenticação e o token de autenticação é enviado com as solicitações que precisam de autenticação\n\n## Visão Geral\n\nA documentação desta API fornece uma visão geral das solicitações suportadas pelo código POSTMAN. As solicitações incluem addBooking, getBookings, getAllBookings, getAllBookingsByDate, getAllBookingsBetweenDates, deleteBooking, updateBooking, allDatesOpenForBooking e bookingApprover. \n\n## Solicitações\n\nAs seguintes solicitações estão disponíveis nesta API:\n\n### addBooking\n\nEsta solicitação permite que os usuários criem um registro de alojamento. Para registrar um usuário, envie uma solicitação POST para \"/api/v1/bookings\". Os seguintes parâmetros são obrigatórios:\n\n- id_dog: o ID do cachorro para o qual a reserva está sendo feita\n- booking_day: uma matriz de datas em que a reserva será feita\n- user: o ID do usuário que está fazendo a reserva\n    \n\n### getBookings\n\nEsta solicitação permite que os usuários saibam todos os registros de alojamentos realizados por ele. Para fazer esse passo, envie uma solicitação GET para\"/api/v1/bookings\". \n\n### getAllBookings\n\nEsta solicitação permite que o admin obtenha todas as reservas cadastradas. Para obter as informações da conta, envie uma solicitação GET para “api/v1/bookings/all”.\n\n### getAllBookingsByDate\n\nEsta solicitação permite que o admin obtenha todas as reservas cadastradas em um dia específico. Para obter as informações da conta, envie uma solicitação GET para “api/v1/bookings/byOneDate/2024-04-10”. (2024-04-10 trará reservas nesse dia)\n\n### getAllBookingsBetweenDates\n\nEsta solicitação permite que o admin obtenha todas as reservas cadastradas entre as datas escolhidas. Para obter as informações da conta, envie uma solicitação GET para “api/v1/bookings/byOneDate/api/v1/bookings/byDates/2024-04-01/2024-04-20”. (trará reservas entre os dias 2024-04-01 e 2024-04-20)\n\n### deleteBooking\n\nEsta solicitação permite que os usuários cancelem um agendamento para o alojamento. Para fazer logout, envie uma solicitação DEL para “api/v1/bookings/64287262ba9fa6424ce51e15”. (64287262ba9fa6424ce51e15 é o id do alojamento escolhido pelo usuário para ser cancelado).\n\n### updateBooking\n\nEsta solicitação permite que os usuários atualizem as informações da reserva para alojamento. Para atualizar as informações da reserva, envie uma solicitação PUT para api/v1/bookings/64287253ba9fa6424ce51e0f. ( 64287253ba9fa6424ce51e0f é o id da reserva escolhida para ser editada). Os seguintes parâmetros são obrigatórios:\n\n- id_dog: id do cão escolhido que fique na reserva\n- booking_day: data escolhida para a reserva\n    \n\n### allDatesOpenForBooking\n\nEsta solicitação permite que o usuário obtenha todas as reservas cadastradas entre as datas escolhidas. Para obter as informações da conta, envie uma solicitação GET para “api/v1/bookings/available/2024-04-01/2024-04-20”. (trará a soma das reservas realizadas e as vagas disponíveis entre os dias 2024-04-01 e 2024-04-20). É uma requisição pública. Não é necessário ter registro de usuário ou cão cadastrado.\n\n### bookingApprover\n\nEsta solicitação permite que o admin faça a aprovação da reserva, que por default é cadastrada como pendente. Para obter as informações da conta, envie uma solicitação PUT para “api/v1/bookings/approve/64287253ba9fa6424ce51e0f”. (64287253ba9fa6424ce51e0f é o id da reserva escolhida para aprovação).\n\nCom esta documentação, os desenvolvedores podem começar a usar a funcionalidade das reservas de forma rápida e fácil para prosseguir com a segunda etapa do projeto, que é administrar a quantidade de vagas existentes, valores padrões das reservas, valores diferenciados e os dias escolhidos para esse valores ditos especiais."
+		},
+		{
+			"name": "bookingConfig",
+			"item": [
+				{
+					"name": "addconfig",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MWY1YzEyY2EwNDI3YTZlNjExYzQ0YSIsImlhdCI6MTY3OTc3NjgxMSwiZXhwIjoxNjgyMzY4ODExfQ.pcCReFaBonKh2XI3nZAnwYxVCbEKe_LhkLT84y9H008",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"maximum_amount_of_bookings\":10,\r\n\"valor_por_pernoite\":50,\r\n\"preco_diferenciado\":100,\r\n\"dias_com_valor_diferente_do_padrao\":[\r\n  \"2024-12-24\",\r\n  \"2024-12-25\",\r\n  \"2024-12-26\",\r\n  \"2024-12-27\",\r\n  \"2024-12-30\",\r\n  \"2024-12-31\"\r\n ]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookingConfig",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookingConfig"
+							]
+						},
+						"description": "StartFragment\n\nEssa requisição é responsável pela inclusão dos dados administrativos da reserva.\n\nOs parâmetros necessários são:\n\n- maximum_amount_of_bookings : o ID do cachorro para o qual a reserva está sendo feita\n- valor_por_pernoite : uma matriz de datas em que a reserva será feita (YYYY-MM-DD)\n- dias_com_valor_diferente_do_padrao : o ID do usuário que está fazendo a reserva\n- Array de datas com valores de diárias diferentes do padrão : o ID do usuário que está fazendo a reserva\n    \n\nAo receber a requisição, a função \"addconfig\" criará os dados para utilização do registro nas reservas.\n\nResposta de sucesso  \nCódigo: 201 CREATED  \nConteúdo:  \njson  \nCopy code  \n{ \"success\": true, \"data\": { \"_id\": \"5fd996e46555601f5cf8cccb\", \"maximum_amount_of_bookings\": 5, \"valor_por_pernoite\": 100.00, \"preco_diferenciado\": 120.00, \"dias_com_valor_diferente_do_padrao\": \\[\"2023-05-01\", \"2023-06-01\"\\], \"__v\": 0 } }  \nResposta de erro  \nCódigo: 401 UNAUTHORIZED  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Acesso não autorizado\" }  \nCódigo: 500 INTERNAL SERVER ERROR  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Mensagem de erro\" }\n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "updateBookingConfig",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const moment = require('moment');\r",
+									"const dias_com_valor_diferente_do_padrao = moment().format('YYYY-MM-DD');\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MWY1YzEyY2EwNDI3YTZlNjExYzQ0YSIsImlhdCI6MTY3OTc3NjgxMSwiZXhwIjoxNjgyMzY4ODExfQ.pcCReFaBonKh2XI3nZAnwYxVCbEKe_LhkLT84y9H008",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"maximum_amount_of_bookings\":10,\r\n\"valor_por_pernoite\":50,\r\n\"preco_diferenciado\":100,\r\n\"dias_com_valor_diferente_do_padrao\":[\r\n  \"2024-12-24\",\r\n  \"2024-12-25\",\r\n  \"2024-12-26\",\r\n  \"2024-12-27\",\r\n  \"2024-12-30\",\r\n  \"2024-12-31\"\r\n ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/bookingConfig/642718f88a7eaff8012e3ed2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"bookingConfig",
+								"642718f88a7eaff8012e3ed2"
+							]
+						},
+						"description": "Essa requisição é responsável pela inclusão dos dados administrativos da reserva.\n\nOs parâmetros necessários são:\n\n- maximum_amount_of_bookings : o ID do cachorro para o qual a reserva está sendo feita\n- valor_por_pernoite : uma matriz de datas em que a reserva será feita (YYYY-MM-DD)\n- dias_com_valor_diferente_do_padrao : o ID do usuário que está fazendo a reserva\n- Array de datas com valores de diárias diferentes do padrão : o ID do usuário que está fazendo a reserva\n    \n\nAo receber a requisição, a função \"updateBookingConfig\" atualizará os dados para utilização do registro nas reservas.\n\n  \nResposta de sucesso  \nCódigo: 200 OK  \nConteúdo:  \njson  \nCopy code  \n{ \"success\": true, \"data\": { \"_id\": \"5fd996e46555601f5cf8cccb\", \"maximum_amount_of_bookings\": 10, \"valor_por_pernoite\": 100, \"preco_diferenciado\": false, \"dias_com_valor_diferente_do_padrao\": \\[\"2023-05-01\", \"2023-06-15\"\\], \"__v\": 0 } }  \nResposta de erro  \nCódigo: 401 UNAUTHORIZED  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Not authorized to access this route\" }  \nCódigo: 404 NOT FOUND  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"Não foi possível encontrar a configuração de reserva com ID {{id}}\" }  \nCódigo: 500 INTERNAL SERVER ERROR  \njson  \nCopy code  \n{ \"success\": false, \"error\": \"{{mensagem de erro}}\" }\n\nEndFragment"
+					},
+					"response": []
+				}
+			],
+			"description": "StartFragment\n\n# Introdução à Pasta \"BookingConfig\" da Coleção \"Passeio Amigo\"\n\nEsta pasta do Postman oferece endpoints para administrar a quantidade de vagas existentes, valores padrões das reservas, valores diferenciados e os dias escolhidos para esse valores ditos especiais.\n\nAs solicitações são escritas usando o método HTTP correto para o endpoint POST.\n\n## Visão Geral\n\nA documentação desta API fornece uma visão geral das solicitações suportadas pelo código POSTMAN. As solicitações são addconfig (o primeiro registro para as informações guardadas) e updateBookingConfig. \n\n## Solicitações\n\nAs seguintes solicitações estão disponíveis nesta API:\n\n### addconfig\n\nEsta solicitação permite criar uma data nova para criar os dados de quantidade de alojamentos disponibilizados, valor padrão a ser cobrado no pernoite, um preço diferenciado para dias específicos e a escolha dos dias específicos. Para registrar essas informações, envie uma solicitação POST para “api/v1/bookingConfig”. Os seguintes parâmetros são obrigatórios:\n\n- maximum_amount_of_bookings: vagas disponibilizadas\n- valor_por_pernoite: valor definido como padrão para reserva\n- preco_diferenciado: valor diferenciado para reserva\n- dias_com_valor_diferente_do_padrao: dias escolhidos para o valor diferenciado\n    \n\n### updateBookingConfig\n\nEsta solicitação permite modificar os dados de quantidade de alojamentos disponibilizados, valor padrão a ser cobrado no pernoite, um preço diferenciado para dias específicos e dos dias específicos. Para modificar essas informações, envie uma solicitação POST para “api/v1/bookingConfig/642718f88a7eaff8012e3ed2” (642718f88a7eaff8012e3ed2 é o id da configuração escolhida para ser modificada). Os seguintes parâmetros são obrigatórios:\n\n- maximum_amount_of_bookings: vagas disponibilizadas\n- valor_por_pernoite: valor definido como padrão para reserva\n- preco_diferenciado: valor diferenciado para reserva\n- dias_com_valor_diferente_do_padrao: dias escolhidos para o valor diferenciado\n    \n\nCom esta documentação, os desenvolvedores podem usar por completo todas as funcionalidades dessa API, criando usuário, registrando cães, realizando reservas e editando valores cobrados e espaço disponível."
+		}
+	]
+}

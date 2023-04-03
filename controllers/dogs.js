@@ -19,7 +19,7 @@ exports.addDog = asyncHandler(async (req, res, next) => {
 
 // @desc    Get all dogs for a user
 // @route   GET /api/v1/dogs
-// @access  Private
+// @access  Admin
 exports.getDogs = asyncHandler(async (req, res, next) => {
 	const dogs = await Dog.find();
 	

@@ -4,7 +4,7 @@ const BookingConfig = require('../models/BookingConfig');
 
 // @desc    Add a booking
 // @route   POST /api/v1/bookingConfig
-// @access  Private
+// @access  Admin
 exports.addBookingConfig = asyncHandler(async (req, res, next) => {
 	// Verifica se o usuário que está fazendo a solicitação é um administrador
 	if (req.user.role !== 'admin') {
