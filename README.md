@@ -42,6 +42,9 @@ Para executar o projeto localmente, é necessário ter o Nodejs e o MongoDB inst
 Execute npm run server para iniciar a aplicação.
 Acesse http://localhost:4000 para utilizar a API.
 
+##COMO INICIAR AS FUNCIONALIDADES
+Comece usando a função addBookingConfig na rota pelo metodo POST na rota api/v1/bookingConfig para que seja cadastrado os dados que serão consumidos durante as reservas.
+
 Documentação
 Para mais informações sobre a utilização da API e suas rotas, consulte a documentação completa em https://documenter.getpostman.com/view/19134738/2s93RUvXeX
 
