@@ -5,6 +5,8 @@ const geocoder = require('../utils/geocoder');
 
 const path = require('path');
 
+//Teste de novo branch
+
 // @desc      Register user
 // @route     POST /api/v1/auth/register
 // @access    Public
